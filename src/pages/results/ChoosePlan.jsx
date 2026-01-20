@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import areeb from '../../assets/icons/areeb-logo.svg';
-import PhaseSection from '../../components/ui/PhaseSection';
-import { mockRoadmapPhases } from '../../data/mockRoadmap';
+import PlanCard from '../../components/ui/PlanCard';
+import { mockLearningPlans } from '../../data/mockRoadmap';
 
 // Neon Effect Component
 const NeonEffect = ({ className, variant = "default" }) => {
@@ -20,11 +20,12 @@ function Logo({ className }) {
 }
 
 // Icons
-const MapIcon = () => (
+const CalendarIcon = () => (
   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M9 3v15" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M15 6v15" strokeLinecap="round" strokeLinejoin="round"/>
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M16 2v4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M8 2v4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M3 10h18" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
@@ -42,21 +43,22 @@ const ArrowLeft = () => (
   </svg>
 );
 
-
-
-export default function RoadmapResult() {
+export default function ChoosePlan() {
   const navigate = useNavigate();
   
-  // TODO: In the future, get personalized roadmap from API based on selected plan
-  const roadmapPhases = mockRoadmapPhases;
+  // TODO: In the future, this will be managed by a state management solution (e.g., Context API, Redux)
+  // Find the recommended plan by default
+  const defaultPlan = mockLearningPlans.find(plan => plan.recommended)?.id || mockLearningPlans[0].id;
+  const [selectedPlanId, setSelectedPlanId] = useState(defaultPlan);
 
   const handleBack = () => {
-    navigate('/results/choose-plan');
+    navigate('/results/topics-analysis');
   };
 
-  const handleStartLearning = () => {
-    // TODO: Navigate to dashboard or learning journey
-    navigate('/dashboard');
+  const handleContinue = () => {
+    // TODO: Store selected plan in state management
+    // For now, we'll navigate directly to roadmap
+    navigate('/results/roadmap');
   };
 
   return (
@@ -81,31 +83,46 @@ export default function RoadmapResult() {
           </span>
         </Link>
 
-        {/* Roadmap Container */}
-        <div className="max-w-[1000px] w-full mx-auto mt-24">
+        {/* Choose Plan Container */}
+        <div className="max-w-[1100px] w-full mx-auto mt-24">
           
           {/* Header */}
           <div className="text-center mb-12">
             <div className="flex justify-center mb-6">
               <div className="w-16 h-16 rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] flex items-center justify-center shadow-[0_4px_30px_rgba(112,51,255,0.4)]">
-                <MapIcon />
+                <CalendarIcon />
               </div>
             </div>
             
             <h1 className="text-[48px] font-bold font-['Space_Grotesk'] text-[#EAEDFA] mb-4 leading-tight">
-              Your Personalized Roadmap
+              Choose Your Learning Plan
             </h1>
             
             <p className="text-xl text-[#EAEDFA]/70 max-w-[600px] mx-auto">
-              Here&apos;s your step-by-step learning journey. Follow these phases to master your goals efficiently.
+              Select the plan that best fits your schedule and commitment level. You can always adjust it later.
             </p>
           </div>
 
-          {/* Roadmap Phases */}
-          <div className="space-y-6 mb-8">
-            {roadmapPhases.map((phase) => (
-              <PhaseSection key={phase.phase} phase={phase} />
+          {/* Plans Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {mockLearningPlans.map((plan) => (
+              <PlanCard 
+                key={plan.id}
+                plan={plan}
+                isSelected={selectedPlanId === plan.id}
+                onSelect={setSelectedPlanId}
+              />
             ))}
+          </div>
+
+          {/* Info Box */}
+          <div className="bg-white/5 border border-[#EAEDFA]/10 rounded-2xl p-6 backdrop-blur-sm mb-6">
+            <h3 className="text-lg font-semibold font-['Space_Grotesk'] text-[#EAEDFA] mb-2">
+              💡 Tip: Be Realistic
+            </h3>
+            <p className="text-[#EAEDFA]/70">
+              Choose a plan that matches your actual availability. Consistency is more important than intensity. You can always speed up or slow down as you progress.
+            </p>
           </div>
 
           {/* Action Buttons */}
@@ -119,10 +136,11 @@ export default function RoadmapResult() {
             </button>
             
             <button 
-              onClick={handleStartLearning}
-              className="px-8 h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)] flex items-center justify-center gap-2"
+              onClick={handleContinue}
+              disabled={!selectedPlanId}
+              className="px-8 h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Start Learning Journey
+              View Your Roadmap
               <ArrowRight />
             </button>
           </div>

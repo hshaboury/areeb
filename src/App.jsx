@@ -9,6 +9,8 @@ import KnowledgeCheck from "./pages/assessment/KnowledgeCheck";
 import Quiz from "./pages/assessment/Quiz";
 import Analysis from "./pages/assessment/Analysis";
 import FinalResult from "./pages/results/FinalResult";
+import TopicsAnalysis from "./pages/results/TopicsAnalysis";
+import ChoosePlan from "./pages/results/ChoosePlan";
 import RoadmapResult from "./pages/results/RoadmapResult";
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
         <Route path="/assessment/quiz" element={<Quiz />} />
         <Route path="/assessment/analysis" element={<Analysis />} />
         <Route path="/results/final" element={<FinalResult />} />
+        <Route path="/results/topics-analysis" element={<TopicsAnalysis />} />
+        <Route path="/results/choose-plan" element={<ChoosePlan />} />
         <Route path="/results/roadmap" element={<RoadmapResult />} />
       </Routes>
     </Router>
