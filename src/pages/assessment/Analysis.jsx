@@ -38,7 +38,7 @@ export default function Analysis() {
   React.useEffect(() => {
     // TODO: In the future, this will make an API call to analyze quiz results using AI
     const timer = setTimeout(() => {
-      navigate('/results/final');
+      navigate('/results/topics-analysis');
     }, 3000);
 
     return () => clearTimeout(timer);
