@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/* CSS VARIABLES — Colors, Gradients, Fonts */
+:root {
+  --primary-background: #0a0f2b;
+  --primary-light1: #eaedfa;
+
+  --secondary-gradient1: #b899ff; /* Light Purple */
+  --secondary-gradient2: #7033ff; /* Dark Purple */
+
+  --font-family-space-grotesk: 'Space Grotesk', sans-serif;
+  --font-family-plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--primary-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--secondary-gradient2);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-gradient1);
+}
+
+/* GLOBAL BASE STYLES (Tailwind Layer) */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--primary-background);
+    font-family: var(--font-family-plus-jakarta-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-space-grotesk);
+  }
+}
+
+/* GENERAL FIXES */
+html, body {
+  overflow-x: hidden;
+}
