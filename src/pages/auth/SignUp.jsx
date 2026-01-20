@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 
 // Import Icons
-import areeb from '../assets/icons/areeb-logo.svg'; 
-import GithubIcon from '../assets/icons/GithubIcon.svg';
+import areeb from '../../assets/icons/areeb-logo.svg'; 
+import GithubIcon from '../../assets/icons/GithubIcon.svg';
 // Google Icon Import here...
-import googleIcon from '../assets/icons/google.svg';
+import googleIcon from '../../assets/icons/google.svg';
 
 // Neon Component (نفس اللي في Landing بالظبط)
 const NeonEffect = ({ className, variant = "default" }) => {

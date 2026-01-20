@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 // Import Icons
-import areeb from '../assets/icons/areeb-logo.svg'; 
-import GithubIcon from '../assets/icons/GithubIcon.svg';
+import areeb from '../../assets/icons/areeb-logo.svg'; 
+import GithubIcon from '../../assets/icons/GithubIcon.svg';
 // Google Icon Import here...
-import GoogleIcon from '../assets/icons/google.svg';
+import GoogleIcon from '../../assets/icons/google.svg';
 // Neon Component (نفس اللي استخدمناه)
 const NeonEffect = ({ className, variant = "default" }) => {
   const colors = {
