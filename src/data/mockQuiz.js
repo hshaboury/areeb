@@ -265,7 +265,10 @@ export const quizData = {
 };
 
 // Helper function to get questions by track
+// Supports track names: frontend, backend, fullstack, mobile, datascience (or "data science")
 export const getQuestionsByTrack = (track) => {
+  if (!track) return quizData.frontend;
+  
   const trackKey = track.toLowerCase().replace(/\s+/g, '');
   return quizData[trackKey] || quizData.frontend; // Default to frontend if track not found
 };
