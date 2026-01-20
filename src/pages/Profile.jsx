@@ -204,10 +204,10 @@ export default function Profile() {
                     Cancel
                 </button>
                 
-                {/* Link to dashboard or home */}
-                <Link to="/dashboard" className="flex-1">
+                {/* Link to assessment knowledge check */}
+                <Link to="/assessment/knowledge-check" className="flex-1">
                     <button className="w-full h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)]">
-                        Save Changes
+                        Save Profile
                     </button>
                 </Link>
             </div>
