@@ -2,19 +2,19 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 // Import Images
-import Img1 from '../assets/images/mypic.jpg';
+import Img1 from '../../assets/images/mypic.jpg';
 
 // Import Icon SVGs
-import AnalysisIcon from '../assets/icons/AnalysisIcon.svg';
-import areeb from '../assets/icons/areeb-logo.svg';
-import CallIcon from '../assets/icons/CallIcon.svg';
-import ArrowRightIcon from '../assets/icons/circle-arrow-right.svg';
-import FacebookIcon from '../assets/icons/FacebookIcon.svg';
-import GithubIcon from '../assets/icons/GithubIcon.svg';
-import InstagramIcon from '../assets/icons/InstagramIcon.svg';
-import MailIcon from '../assets/icons/MailIcon.svg';
-import RouteIcon from '../assets/icons/RouteIcon.svg';
-import SetupIcon from '../assets/icons/SetupIcon.svg';
+import AnalysisIcon from '../../assets/icons/AnalysisIcon.svg';
+import areeb from '../../assets/icons/areeb-logo.svg';
+import CallIcon from '../../assets/icons/CallIcon.svg';
+import ArrowRightIcon from '../../assets/icons/circle-arrow-right.svg';
+import FacebookIcon from '../../assets/icons/FacebookIcon.svg';
+import GithubIcon from '../../assets/icons/GithubIcon.svg';
+import InstagramIcon from '../../assets/icons/InstagramIcon.svg';
+import MailIcon from '../../assets/icons/MailIcon.svg';
+import RouteIcon from '../../assets/icons/RouteIcon.svg';
+import SetupIcon from '../../assets/icons/SetupIcon.svg';
 
 // Icon Components
 function Github({ className }) {
