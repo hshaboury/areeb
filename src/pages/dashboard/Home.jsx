@@ -8,7 +8,7 @@ import RoadmapPreview from './components/RoadmapPreview';
 import { mockDashboardData, getCurrentPhase } from '../../data/mockDashboard';
 
 export default function Home() {
-  const { user, selectedPlan, stats, phases } = mockDashboardData;
+  const { selectedPlan, stats, phases } = mockDashboardData;
   const currentPhase = getCurrentPhase(phases);
 
   return (
