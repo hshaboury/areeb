@@ -195,10 +195,10 @@ export default function AIQuizReview() {
   }
 
   return (
-    <div className="min-h-screen w-full flex bg-[#0A0F2B] font-['Plus_Jakarta_Sans'] overflow-hidden">
+    <div className="min-h-screen w-full flex bg-[#0A0F2B] font-['Plus_Jakarta_Sans']">
       
       {/* Background Effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute inset-0 bg-[#0A0F2B] opacity-20 z-10" />
         <NeonEffect className="w-[600px] h-[600px] -right-[200px] -top-[200px] opacity-90" variant="variant4" />
         <NeonEffect className="w-[500px] h-[500px] left-[-100px] top-[30%] opacity-80" variant="default" />

@@ -10,7 +10,6 @@ import QuickSkillCheck from "./pages/assessment/QuickSkillCheck";
 import TopicsAnalysis from "./pages/assessment/TopicsAnalysis";
 import AIQuiz from "./pages/assessment/AIQuiz";
 import AIQuizReview from "./pages/assessment/AIQuizReview";
-import FinalResult from "./pages/results/FinalResult";
 import ChoosePlan from "./pages/results/ChoosePlan";
 import RoadmapResult from "./pages/results/RoadmapResult";
 
@@ -33,7 +32,6 @@ function App() {
           <Route path="/assessment/ai-quiz-review" element={<AIQuizReview />} />
           
           {/* Results Flow */}
-          <Route path="/results/final" element={<FinalResult />} />
           <Route path="/results/choose-plan" element={<ChoosePlan />} />
           <Route path="/results/roadmap" element={<RoadmapResult />} />
         </Routes>

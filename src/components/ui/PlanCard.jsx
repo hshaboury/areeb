@@ -30,13 +30,13 @@ export default function PlanCard({ plan, isSelected, onSelect }) {
       }`}
     >
       {/* Recommended Badge */}
-      {plan.recommended && (
+      {/* {plan.recommended && (
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
           <div className="px-4 py-1 rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-white text-xs font-bold">
             RECOMMENDED
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Selection Indicator */}
       {isSelected && (
