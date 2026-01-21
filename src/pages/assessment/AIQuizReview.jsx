@@ -176,7 +176,8 @@ export default function AIQuizReview() {
     };
 
     loadAndAnalyze();
-  }, [track, aiQuizAnswers, setAiQuizResults, completeStep]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleContinue = () => {
     navigate('/results/choose-plan');

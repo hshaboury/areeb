@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState } from 'react';
 const AssessmentContext = createContext();
 
 // Custom hook to use the Assessment Context
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAssessment = () => {
   const context = useContext(AssessmentContext);
   if (!context) {

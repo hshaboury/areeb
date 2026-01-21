@@ -64,7 +64,8 @@ export default function TopicsAnalysis() {
     };
 
     analyzeQuickCheck();
-  }, [quickCheckResult, setTopicsAnalysis, completeStep]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleContinue = () => {
     navigate('/assessment/ai-quiz');
