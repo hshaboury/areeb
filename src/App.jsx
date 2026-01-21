@@ -6,9 +6,6 @@ import SignUp from "./pages/auth/SignUp";
 import Goals from "./pages/Goals";
 import Track from "./pages/Track";
 import Profile from "./pages/Profile";
-import KnowledgeCheck from "./pages/assessment/KnowledgeCheck";
-import Quiz from "./pages/assessment/Quiz";
-import Analysis from "./pages/assessment/Analysis";
 import QuickSkillCheck from "./pages/assessment/QuickSkillCheck";
 import TopicsAnalysis from "./pages/assessment/TopicsAnalysis";
 import AIQuiz from "./pages/assessment/AIQuiz";
@@ -34,11 +31,6 @@ function App() {
           <Route path="/assessment/topics-analysis" element={<TopicsAnalysis />} />
           <Route path="/assessment/ai-quiz" element={<AIQuiz />} />
           <Route path="/assessment/ai-quiz-review" element={<AIQuizReview />} />
-          
-          {/* Legacy assessment routes - keeping for backwards compatibility */}
-          <Route path="/assessment/knowledge-check" element={<KnowledgeCheck />} />
-          <Route path="/assessment/quiz" element={<Quiz />} />
-          <Route path="/assessment/analysis" element={<Analysis />} />
           
           {/* Results Flow */}
           <Route path="/results/final" element={<FinalResult />} />
