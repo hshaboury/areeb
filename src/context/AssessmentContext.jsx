@@ -62,6 +62,13 @@ export const AssessmentProvider = ({ children }) => {
   // Selected learning plan
   const [selectedPlan, setSelectedPlan] = useState('');
 
+  // Dashboard progress data
+  const [dashboardProgress, setDashboardProgress] = useState({
+    currentPhaseId: 1,
+    completedTasks: [],
+    phaseProgress: {}
+  });
+
   // Helper function to check if user can access a specific step
   const canAccessStep = (step) => {
     return step <= currentStep + 1; // Allow access to current step and next step only
@@ -94,6 +101,7 @@ export const AssessmentProvider = ({ children }) => {
     aiQuizAnswers,
     aiQuizResults,
     selectedPlan,
+    dashboardProgress,
     
     // Setters
     setCurrentStep,
@@ -103,6 +111,7 @@ export const AssessmentProvider = ({ children }) => {
     setAiQuizAnswers,
     setAiQuizResults,
     setSelectedPlan,
+    setDashboardProgress,
     
     // Helper functions
     canAccessStep,
