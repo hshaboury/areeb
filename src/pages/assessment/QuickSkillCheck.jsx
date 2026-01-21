@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAssessment } from '../../context/AssessmentContext';
+import { useAssessment, ASSESSMENT_STEPS } from '../../context/AssessmentContext';
 import { getQuestionsByTrack } from '../../data/mockQuiz';
 import areeb from '../../assets/icons/areeb-logo.svg';
 
@@ -139,7 +139,7 @@ export default function QuickSkillCheck() {
       questions.forEach((question) => {
         const userAnswer = answers[question.id];
         const correctAnswer = question.answers.find(a => a.isCorrect);
-        if (userAnswer === correctAnswer.id) {
+        if (correctAnswer && userAnswer === correctAnswer.id) {
           score++;
         }
       });
@@ -153,7 +153,7 @@ export default function QuickSkillCheck() {
       setQuickCheckResult(result);
       
       // Complete step 1 (Quick Skill Check)
-      completeStep(1);
+      completeStep(ASSESSMENT_STEPS.QUICK_SKILL_CHECK);
       
       // TODO: In the future, send results to backend for AI analysis
       navigate('/assessment/topics-analysis');

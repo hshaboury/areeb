@@ -1,5 +1,17 @@
 import React, { createContext, useContext, useState } from 'react';
 
+// Assessment flow steps - for route protection
+export const ASSESSMENT_STEPS = {
+  PROFILE: 0,
+  QUICK_SKILL_CHECK: 1,
+  TOPICS_ANALYSIS: 2,
+  AI_QUIZ: 3,
+  AI_QUIZ_REVIEW: 4,
+  CHOOSE_PLAN: 5,
+  ROADMAP: 6,
+  DASHBOARD: 7
+};
+
 // Create the Assessment Context
 const AssessmentContext = createContext();
 
@@ -16,8 +28,7 @@ export const useAssessment = () => {
 // Assessment Provider Component
 export const AssessmentProvider = ({ children }) => {
   // Step tracking (for route protection)
-  // 0: Profile, 1: Quick Skill Check, 2: Topics Analysis, 3: AI Quiz, 4: AI Quiz Review, 5: Choose Plan, 6: Roadmap, 7: Dashboard
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(ASSESSMENT_STEPS.PROFILE);
 
   // Selected track from profile setup
   const [selectedTrack, setSelectedTrack] = useState('');
@@ -65,7 +76,7 @@ export const AssessmentProvider = ({ children }) => {
 
   // Reset all assessment data (useful for starting over)
   const resetAssessment = () => {
-    setCurrentStep(0);
+    setCurrentStep(ASSESSMENT_STEPS.PROFILE);
     setSelectedTrack('');
     setQuickCheckResult({ answers: {}, score: 0, completedAt: null });
     setTopicsAnalysis({ proficient: [], needsReview: [], needsLearning: [] });

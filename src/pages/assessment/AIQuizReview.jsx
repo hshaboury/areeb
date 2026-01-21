@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAssessment } from '../../context/AssessmentContext';
+import { useAssessment, ASSESSMENT_STEPS } from '../../context/AssessmentContext';
 import { getAIQuizByTrack, analyzeAIQuizResults } from '../../data/mockAIQuiz';
 import areeb from '../../assets/icons/areeb-logo.svg';
 
@@ -169,7 +169,7 @@ export default function AIQuizReview() {
         setAiQuizResults(analysisResults);
         
         // Complete step 4 (AI Quiz Review)
-        completeStep(4);
+        completeStep(ASSESSMENT_STEPS.AI_QUIZ_REVIEW);
         
         setIsLoading(false);
       }, 1000);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAssessment } from '../../context/AssessmentContext';
+import { useAssessment, ASSESSMENT_STEPS } from '../../context/AssessmentContext';
 import areeb from '../../assets/icons/areeb-logo.svg';
 import TopicStatusRow from '../../components/ui/TopicStatusRow';
 import { mockTopicsAnalysis } from '../../data/mockRoadmap';
@@ -57,7 +57,7 @@ export default function TopicsAnalysis() {
         setTopicsAnalysis(analysis);
         
         // Complete step 2 (Topics Analysis)
-        completeStep(2);
+        completeStep(ASSESSMENT_STEPS.TOPICS_ANALYSIS);
         
         setIsAnalyzing(false);
       }, 1500);

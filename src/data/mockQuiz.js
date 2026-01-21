@@ -1,3 +1,5 @@
+import { normalizeTrackKey } from '../utils/dataUtils';
+
 // Mock quiz data for different tracks
 // TODO: In the future, these questions will be fetched dynamically based on AI analysis of the user's track and skill level
 
@@ -267,8 +269,6 @@ export const quizData = {
 // Helper function to get questions by track
 // Supports track names: frontend, backend, fullstack, mobile, datascience (or "data science")
 export const getQuestionsByTrack = (track) => {
-  if (!track) return quizData.frontend;
-  
-  const trackKey = track.toLowerCase().replace(/\s+/g, '');
+  const trackKey = normalizeTrackKey(track);
   return quizData[trackKey] || quizData.frontend; // Default to frontend if track not found
 };

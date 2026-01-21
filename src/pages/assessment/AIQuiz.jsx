@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAssessment } from '../../context/AssessmentContext';
+import { useAssessment, ASSESSMENT_STEPS } from '../../context/AssessmentContext';
 import { getAIQuizByTrack } from '../../data/mockAIQuiz';
 import areeb from '../../assets/icons/areeb-logo.svg';
 
@@ -190,7 +190,7 @@ export default function AIQuiz() {
     if (isLastQuestion) {
       if (allQuestionsAnswered) {
         // Complete step 3 (AI Quiz)
-        completeStep(3);
+        completeStep(ASSESSMENT_STEPS.AI_QUIZ);
         
         // TODO: In the future, send answers to backend for AI analysis
         navigate('/assessment/ai-quiz-review');
