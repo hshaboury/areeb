@@ -87,6 +87,7 @@ Access learning materials, track progress, and engage with community (UI mockup)
 ---
 
 ## Project Structure
+```bash
 src/
 ├── assets/
 ├── components/
@@ -103,7 +104,7 @@ src/
 ├── App.jsx
 ├── main.jsx
 └── index.css
-  
+```  
 ---
 
 ## Run Locally
