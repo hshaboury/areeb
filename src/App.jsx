@@ -12,6 +12,11 @@ import AIQuiz from "./pages/assessment/AIQuiz";
 import AIQuizReview from "./pages/assessment/AIQuizReview";
 import ChoosePlan from "./pages/results/ChoosePlan";
 import RoadmapResult from "./pages/results/RoadmapResult";
+import DashboardHome from "./pages/dashboard/Home";
+import RoadmapView from "./pages/dashboard/RoadmapView";
+import Courses from "./pages/dashboard/Courses";
+import Analytics from "./pages/dashboard/Analytics";
+import Community from "./pages/dashboard/Community";
 
 function App() {
   return (
@@ -34,6 +39,13 @@ function App() {
           {/* Results Flow */}
           <Route path="/results/choose-plan" element={<ChoosePlan />} />
           <Route path="/results/roadmap" element={<RoadmapResult />} />
+          
+          {/* Dashboard Routes */}
+          <Route path="/dashboard" element={<DashboardHome />} />
+          <Route path="/dashboard/roadmap" element={<RoadmapView />} />
+          <Route path="/dashboard/courses" element={<Courses />} />
+          <Route path="/dashboard/analytics" element={<Analytics />} />
+          <Route path="/dashboard/community" element={<Community />} />
         </Routes>
       </Router>
     </AssessmentProvider>
