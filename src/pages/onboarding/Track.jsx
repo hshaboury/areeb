@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 
 // Import Icons
-import areeb from '../assets/icons/areeb-logo.svg'; 
+import areeb from '../../assets/icons/areeb-logo.svg'; 
 
 // --- Neon Component ---
 const NeonEffect = ({ className, variant = "default" }) => {

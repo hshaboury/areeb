@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 // Import Images & Icons
-import defaultAvatar from '../assets/images/mypic.jpg'; 
-import areeb from '../assets/icons/areeb-logo.svg'; 
+import defaultAvatar from '../../assets/images/mypic.jpg'; 
+import areeb from '../../assets/icons/areeb-logo.svg'; 
 
 // --- Neon Component ---
 const NeonEffect = ({ className, variant = "default" }) => {
