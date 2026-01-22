@@ -46,8 +46,7 @@ const ArrowRight = () => (
 );
 
 // --- Option Button ---
-const OptionButton = ({ label, icon, isSelected, onClick }) => {
-    const Icon = icon;
+const OptionButton = ({ label, icon: Icon, isSelected, onClick }) => {
     const getActiveStyle = () => {
         // Levels Logic
         if (label === "Beginner") return "bg-[#7033FF] border-[#7033FF] shadow-[0_0_15px_rgba(112,51,255,0.4)]";

@@ -87,8 +87,8 @@ export default function Profile() {
         selectedTrack: onboardingData.selectedTrack,
         skillLevel: onboardingData.skillLevel,
         name: fullName,
-        linkedIn: formData.linkedIn || undefined,
-        github: formData.github || undefined
+        ...(formData.linkedIn && { linkedIn: formData.linkedIn }),
+        ...(formData.github && { github: formData.github })
       };
 
       await completeOnboarding(onboardingPayload);
