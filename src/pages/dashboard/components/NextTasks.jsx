@@ -39,7 +39,7 @@ const taskIcons = {
 
 export default function NextTasks({ tasks, title = "Next Steps", onTaskComplete, processingTask }) {
   const handleTaskClick = (task) => {
-    if (!task.completed && onTaskComplete && !processingTask) {
+    if (!task.completed && onTaskComplete && processingTask !== task.id) {
       onTaskComplete(task.id);
     }
   };

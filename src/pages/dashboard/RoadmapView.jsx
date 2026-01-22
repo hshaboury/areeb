@@ -3,7 +3,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import PhaseCard from './components/PhaseCard';
 import { getRoadmap } from '../../services/planService';
-import { getProgress, markTaskComplete, updatePhaseProgress } from '../../services/progressService';
+import { markTaskComplete, updatePhaseProgress } from '../../services/progressService';
 import { mockDashboardData } from '../../data/mockDashboard';
 
 export default function RoadmapView() {
@@ -21,10 +21,7 @@ export default function RoadmapView() {
       setLoading(true);
       setError(null);
       
-      const [roadmap] = await Promise.all([
-        getRoadmap(),
-        getProgress()
-      ]);
+      const roadmap = await getRoadmap();
       
       setRoadmapData(roadmap);
     } catch (err) {
