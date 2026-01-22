@@ -16,19 +16,15 @@ import { setAuthToken, setUser } from '../utils/auth';
  * @returns {Promise<object>} - User data and token
  */
 export const register = async (userData) => {
-  try {
-    const response = await apiClient.post('/auth/register', userData);
-    
-    if (response.data.success && response.data.token) {
-      // Store token and user data
-      setAuthToken(response.data.token);
-      setUser(response.data.user);
-    }
-    
-    return response.data;
-  } catch (error) {
-    throw error;
+  const response = await apiClient.post('/auth/register', userData);
+  
+  if (response.data.success && response.data.token) {
+    // Store token and user data
+    setAuthToken(response.data.token);
+    setUser(response.data.user);
   }
+  
+  return response.data;
 };
 
 /**
@@ -39,19 +35,15 @@ export const register = async (userData) => {
  * @returns {Promise<object>} - User data and token
  */
 export const login = async (credentials) => {
-  try {
-    const response = await apiClient.post('/auth/login', credentials);
-    
-    if (response.data.success && response.data.token) {
-      // Store token and user data
-      setAuthToken(response.data.token);
-      setUser(response.data.user);
-    }
-    
-    return response.data;
-  } catch (error) {
-    throw error;
+  const response = await apiClient.post('/auth/login', credentials);
+  
+  if (response.data.success && response.data.token) {
+    // Store token and user data
+    setAuthToken(response.data.token);
+    setUser(response.data.user);
   }
+  
+  return response.data;
 };
 
 /**
@@ -59,16 +51,12 @@ export const login = async (credentials) => {
  * @returns {Promise<object>} - Current user data
  */
 export const getCurrentUser = async () => {
-  try {
-    const response = await apiClient.get('/auth/me');
-    
-    if (response.data.success && response.data.user) {
-      // Update stored user data
-      setUser(response.data.user);
-    }
-    
-    return response.data;
-  } catch (error) {
-    throw error;
+  const response = await apiClient.get('/auth/me');
+  
+  if (response.data.success && response.data.user) {
+    // Update stored user data
+    setUser(response.data.user);
   }
+  
+  return response.data;
 };

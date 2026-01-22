@@ -12,12 +12,8 @@ import apiClient from '../utils/apiClient';
  * @returns {Promise<object>} - Created plan data
  */
 export const createPlan = async (data) => {
-  try {
-    const response = await apiClient.post('/plans', data);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.post('/plans', data);
+  return response.data;
 };
 
 /**
@@ -25,12 +21,8 @@ export const createPlan = async (data) => {
  * @returns {Promise<object>} - Current plan data
  */
 export const getCurrentPlan = async () => {
-  try {
-    const response = await apiClient.get('/plans/current');
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.get('/plans/current');
+  return response.data;
 };
 
 /**
@@ -38,10 +30,6 @@ export const getCurrentPlan = async () => {
  * @returns {Promise<object>} - Roadmap data
  */
 export const getRoadmap = async () => {
-  try {
-    const response = await apiClient.get('/roadmap');
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.get('/roadmap');
+  return response.data;
 };

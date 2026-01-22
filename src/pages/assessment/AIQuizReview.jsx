@@ -148,6 +148,8 @@ export default function AIQuizReview() {
   const navigate = useNavigate();
   const { selectedTrack, aiQuizAnswers, setAiQuizResults, completeStep } = useAssessment();
   
+  // Track is not used directly but kept for potential future use
+  // eslint-disable-next-line no-unused-vars
   const [track] = useState(selectedTrack || 'frontend');
   const [questions, setQuestions] = useState([]);
   const [results, setResults] = useState(null);

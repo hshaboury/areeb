@@ -29,7 +29,7 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     // Log errors in development mode
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       console.error('API Error:', error.response?.data || error.message);
     }
 

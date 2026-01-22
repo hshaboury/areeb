@@ -40,6 +40,8 @@ const ArrowRight = () => (
 
 export default function TopicsAnalysis() {
   const navigate = useNavigate();
+  // quickCheckResult is kept for potential future use
+  // eslint-disable-next-line no-unused-vars
   const { quickCheckResult, setTopicsAnalysis, completeStep } = useAssessment();
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [topicsData, setTopicsData] = useState(null);

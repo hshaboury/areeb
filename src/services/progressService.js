@@ -10,12 +10,8 @@ import apiClient from '../utils/apiClient';
  * @returns {Promise<object>} - User progress data
  */
 export const getProgress = async () => {
-  try {
-    const response = await apiClient.get('/progress');
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.get('/progress');
+  return response.data;
 };
 
 /**
@@ -25,12 +21,8 @@ export const getProgress = async () => {
  * @returns {Promise<object>} - Updated progress data
  */
 export const markTaskComplete = async (data) => {
-  try {
-    const response = await apiClient.post('/progress/task', data);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.post('/progress/task', data);
+  return response.data;
 };
 
 /**
@@ -41,12 +33,8 @@ export const markTaskComplete = async (data) => {
  * @returns {Promise<object>} - Updated phase progress
  */
 export const updatePhaseProgress = async (data) => {
-  try {
-    const response = await apiClient.put('/progress/phase', data);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.put('/progress/phase', data);
+  return response.data;
 };
 
 /**
@@ -54,10 +42,6 @@ export const updatePhaseProgress = async (data) => {
  * @returns {Promise<object>} - Achievement statistics
  */
 export const getAchievementStats = async () => {
-  try {
-    const response = await apiClient.get('/progress/stats');
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.get('/progress/stats');
+  return response.data;
 };

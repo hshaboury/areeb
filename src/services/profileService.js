@@ -10,12 +10,8 @@ import apiClient from '../utils/apiClient';
  * @returns {Promise<object>} - User profile data
  */
 export const getProfile = async () => {
-  try {
-    const response = await apiClient.get('/profile');
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.get('/profile');
+  return response.data;
 };
 
 /**
@@ -24,12 +20,8 @@ export const getProfile = async () => {
  * @returns {Promise<object>} - Updated profile data
  */
 export const updateProfile = async (profileData) => {
-  try {
-    const response = await apiClient.put('/profile', profileData);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.put('/profile', profileData);
+  return response.data;
 };
 
 /**
@@ -43,10 +35,6 @@ export const updateProfile = async (profileData) => {
  * @returns {Promise<object>} - Completion response
  */
 export const completeOnboarding = async (onboardingData) => {
-  try {
-    const response = await apiClient.post('/profile/onboarding', onboardingData);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.post('/profile/onboarding', onboardingData);
+  return response.data;
 };

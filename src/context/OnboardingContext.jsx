@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState } from 'react';
 
-// eslint-disable-next-line react-refresh/only-export-components
+// Create Onboarding Context
 const OnboardingContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useOnboarding = () => {
   const context = useContext(OnboardingContext);
   if (!context) {
