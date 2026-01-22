@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import areeb from '../../assets/icons/areeb-logo.svg';
 import PlanCard from '../../components/ui/PlanCard';
 import { mockLearningPlans } from '../../data/mockRoadmap';
+import { useAssessment } from '../../context/AssessmentContext';
+import { createPlan } from '../../services/planService';
 
 // Neon Effect Component
 const NeonEffect = ({ className, variant = "default" }) => {
@@ -45,20 +47,32 @@ const ArrowLeft = () => (
 
 export default function ChoosePlan() {
   const navigate = useNavigate();
+  const { setSelectedPlan } = useAssessment();
   
-  // TODO: In the future, this will be managed by a state management solution (e.g., Context API, Redux)
-  // Find the recommended plan by default
   const defaultPlan = mockLearningPlans.find(plan => plan.recommended)?.id || mockLearningPlans[0].id;
   const [selectedPlanId, setSelectedPlanId] = useState(defaultPlan);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleBack = () => {
     navigate('/assessment/ai-quiz-review');
   };
 
-  const handleContinue = () => {
-    // TODO: Store selected plan in state management
-    // For now, we'll navigate directly to roadmap
-    navigate('/results/roadmap');
+  const handleContinue = async () => {
+    if (!selectedPlanId) return;
+    
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      await createPlan({ planType: selectedPlanId });
+      setSelectedPlan(selectedPlanId);
+      navigate('/results/roadmap');
+    } catch (err) {
+      console.error('Failed to create plan:', err);
+      setError('Failed to create your learning plan. Please try again.');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -125,6 +139,13 @@ export default function ChoosePlan() {
             </p>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 backdrop-blur-sm mb-6">
+              <p className="text-red-400 text-center">{error}</p>
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="flex gap-4 justify-center">
             <button 
@@ -137,11 +158,11 @@ export default function ChoosePlan() {
             
             <button 
               onClick={handleContinue}
-              disabled={!selectedPlanId}
+              disabled={!selectedPlanId || isLoading}
               className="px-8 h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              View Your Roadmap
-              <ArrowRight />
+              {isLoading ? 'Creating Plan...' : 'View Your Roadmap'}
+              {!isLoading && <ArrowRight />}
             </button>
           </div>
 

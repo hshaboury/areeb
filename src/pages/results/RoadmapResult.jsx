@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import areeb from '../../assets/icons/areeb-logo.svg';
 import PhaseSection from '../../components/ui/PhaseSection';
-import { mockRoadmapPhases } from '../../data/mockRoadmap';
+import { getRoadmap } from '../../services/planService';
 
 // Neon Effect Component
 const NeonEffect = ({ className, variant = "default" }) => {
@@ -47,15 +47,34 @@ const ArrowLeft = () => (
 export default function RoadmapResult() {
   const navigate = useNavigate();
   
-  // TODO: In the future, get personalized roadmap from API based on selected plan
-  const roadmapPhases = mockRoadmapPhases;
+  const [roadmapPhases, setRoadmapPhases] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchRoadmap = async () => {
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        const data = await getRoadmap();
+        setRoadmapPhases(data.phases || []);
+      } catch (err) {
+        console.error('Failed to fetch roadmap:', err);
+        setError('Failed to load your roadmap. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRoadmap();
+  }, []);
 
   const handleBack = () => {
     navigate('/results/choose-plan');
   };
 
   const handleStartLearning = () => {
-    // TODO: Navigate to dashboard or learning journey
     navigate('/dashboard');
   };
 
@@ -102,11 +121,36 @@ export default function RoadmapResult() {
           </div>
 
           {/* Roadmap Phases */}
-          <div className="space-y-6 mb-8">
-            {roadmapPhases.map((phase) => (
-              <PhaseSection key={phase.phase} phase={phase} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="text-center">
+                <div className="inline-block w-12 h-12 border-4 border-[#7033FF] border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p className="text-[#EAEDFA]/70 text-lg">Loading your roadmap...</p>
+              </div>
+            </div>
+          ) : error ? (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-6 backdrop-blur-sm mb-8">
+              <p className="text-red-400 text-center text-lg">{error}</p>
+              <div className="flex justify-center mt-4">
+                <button 
+                  onClick={() => window.location.reload()}
+                  className="px-6 py-2 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-all"
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          ) : roadmapPhases.length > 0 ? (
+            <div className="space-y-6 mb-8">
+              {roadmapPhases.map((phase) => (
+                <PhaseSection key={phase.phase} phase={phase} />
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white/5 border border-[#EAEDFA]/10 rounded-2xl p-6 backdrop-blur-sm mb-8">
+              <p className="text-[#EAEDFA]/70 text-center">No roadmap data available.</p>
+            </div>
+          )}
 
           {/* Action Buttons */}
           <div className="flex gap-4 justify-center">
@@ -120,7 +164,8 @@ export default function RoadmapResult() {
             
             <button 
               onClick={handleStartLearning}
-              className="px-8 h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)] flex items-center justify-center gap-2"
+              disabled={isLoading || roadmapPhases.length === 0}
+              className="px-8 h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Start Learning Journey
               <ArrowRight />
