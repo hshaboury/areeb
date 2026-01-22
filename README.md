@@ -1,122 +1,234 @@
 # Areeb - Learning Platform
 
-> Team Repository – Frontend Implementation
+> Full-Stack Implementation: React Frontend + Node.js Backend
 
 ## Overview
 
-**Areeb** is a learning platform that helps users assess their skills and receive personalized learning roadmaps based on their goals, selected track, and available time.
+**Areeb** is a personalized learning platform that helps users assess their skills and receive AI-powered learning roadmaps based on their goals, selected track, and available time.
 
-This repository contains the **frontend-only implementation** of the platform.  
-It focuses on user flow, UI/UX, routing, and state management.
+This repository contains both the **frontend** (React) and **backend** (Node.js/Express/MongoDB) implementations.
 
-**Current Status:** Backend and AI logic are **not implemented yet** and will be integrated later.
----
-
-### ✅ What's Implemented:
-
-### Frontend Features
-
-- **Landing & Auth** (UI only)
-- **Onboarding Flow**
-  - Goals & preferences
-  - Track selection
-  - Skill level
-  - Profile setup
-- **Assessment Flow (Mocked)**
-  - Quick Skill Check
-  - Topics Analysis
-  - AI Quiz
-  - Quiz Review
-- **Results & Planning**
-  - Plan selection (time-based)
-  - Progressive roadmap flow
-- **Dashboard (UI Only)**
-  - Home
-  - Roadmap view
-  - Other sections as placeholders
-
-**Note:** All data is currently mocked using static JSON files in the `src/data/` folder.
+**Current Status:** ✅ Frontend complete | ✅ Backend complete | ⏳ AI integration ready (mocked)
 
 ---
 
-## ❌ Not Implemented Yet
+## 🎯 Features
 
-- Backend APIs & database
-- Real authentication
-- Real AI logic (quiz generation, analysis, recommendations)
-- Progress tracking & persistence
-- Course content & community features
+### Frontend (React + Tailwind CSS)
+- **Landing & Authentication** - Beautiful UI with social auth options
+- **Onboarding Flow** - 4-step guided setup for goals, track selection, and profile
+- **Assessment System** - Quick skill check, AI-powered quiz, and detailed results
+- **Learning Plans** - Choose from Intensive/Balanced/Relaxed study paths
+- **Interactive Dashboard** - Track progress, view roadmap, manage learning
 
----
-
-## User Flow Summary
-
-### 1. **Landing & Authentication**
-User arrives at the landing page → Signs up or logs in
-
-### 2. **Onboarding (4 Steps)**
-- **Step 1:** Set goals and study preferences
-- **Step 2:** Define learning goals and time commitment
-- **Step 3:** Choose a track and declare skill level
-- **Step 4:** Complete profile setup
-
-### 3. **Assessment Flow**
-- **Quick Skill Check:** Answer 3 basic questions
-- **Topics Analysis:** AI analyzes skills (mocked)
-- **AI Quiz:** Take 15 personalized questions
-- **Quiz Review:** Review answers with feedback
-
-### 4. **Results & Planning**
-- **Choose Plan:** Select learning intensity (Relaxed/Balanced/Intensive)
-- **View Roadmap:** See personalized learning phases
-
-### 5. **Dashboard**
-Access learning materials, track progress, and engage with community (UI mockup)
+### Backend (Node.js + Express + MongoDB)
+- **RESTful API** - 23 endpoints covering all features
+- **JWT Authentication** - Secure token-based auth with password hashing
+- **User Profiles** - Comprehensive profile and onboarding management
+- **Assessment Engine** - Quiz generation, submission, and AI-powered analysis
+- **Learning Plans** - Dynamic roadmap generation based on track and skill level
+- **Progress Tracking** - Task completion, phase progress, and achievement stats
+- **AI Service Layer** - Abstraction ready for real AI integration
 
 ---
 
-## Tech Stack
+## 🚀 Quick Start
 
-- **React 19.2.0** 
-- **React Router DOM 7.10.1** 
-- **Tailwind CSS 4.1.17** 
-- **Vite 7.2.4** 
-- **Context API** 
-- **ESLint** 
-
----
-
-## Project Structure
+### Frontend Setup
 ```bash
-src/
-├── assets/
-├── components/
-├── pages/
-│ ├── public/
-│ ├── auth/
-│ ├── onboarding/
-│ ├── assessment/
-│ ├── results/
-│ └── dashboard/
-├── context/
-├── data/
-├── utils/
-├── App.jsx
-├── main.jsx
-└── index.css
-```  
----
-
-## Run Locally
-
-```bash
+# Install dependencies
 npm install
+
+# Start dev server (Vite)
 npm run dev
 ```
+
+Frontend runs on `http://localhost:5173`
+
+### Backend Setup
+```bash
+# Navigate to backend
+cd backend
+
+# Install dependencies
+npm install
+
+# Configure environment
+cp .env.example .env
+# Update .env with your MongoDB connection
+
+# Start server
+npm run dev
+```
+
+Backend runs on `http://localhost:5000`
+
+📖 **Detailed Setup:** See [backend/SETUP.md](backend/SETUP.md) for complete installation and testing guide
+
 ---
 
-## Team Notes
+## 📁 Project Structure
 
-- **Frontend:** UI, routing, flow, mocked logic
-- **Backend (Planned):** Auth, data storage, progress tracking
-- **AI (Planned):** Quiz generation, skill analysis, roadmap recommendations
+```
+areeb-prototype/
+├── src/                    # Frontend (React)
+│   ├── assets/
+│   ├── components/
+│   ├── pages/
+│   │   ├── auth/          # Login/Register
+│   │   ├── onboarding/    # 4-step onboarding
+│   │   ├── assessment/    # Quiz flow
+│   │   ├── results/       # Plan selection & roadmap
+│   │   └── dashboard/     # User dashboard
+│   ├── context/           # State management
+│   ├── data/              # Mock data
+│   └── utils/
+│
+└── backend/               # Backend (Node.js)
+    ├── config/            # DB connection
+    ├── controllers/       # Route handlers
+    ├── middleware/        # Auth, validation, errors
+    ├── models/            # Mongoose schemas
+    ├── routes/            # API routes
+    ├── services/          # Business logic (AI)
+    ├── utils/             # Helper functions
+    └── data/              # Quiz data
+```
+
+---
+
+## 🔌 API Endpoints
+
+### Authentication
+```
+POST   /api/auth/register     - Register new user
+POST   /api/auth/login        - Login user
+GET    /api/auth/me           - Get current user
+```
+
+### Profile & Onboarding
+```
+GET    /api/profile           - Get user profile
+PUT    /api/profile           - Update profile
+POST   /api/profile/onboarding - Complete onboarding
+```
+
+### Assessment
+```
+POST   /api/assessment/quick-check       - Submit quick skill check
+POST   /api/assessment/analyze-topics    - AI topic analysis
+GET    /api/assessment/ai-quiz           - Get personalized quiz
+POST   /api/assessment/ai-quiz/submit    - Submit quiz answers
+GET    /api/assessment/results           - Get assessment results
+```
+
+### Learning Plans
+```
+POST   /api/plans             - Create learning plan
+GET    /api/plans/current     - Get current plan
+GET    /api/roadmap           - Get full roadmap
+```
+
+### Progress
+```
+GET    /api/progress          - Get user progress
+POST   /api/progress/task     - Mark task complete
+PUT    /api/progress/phase    - Update phase progress
+GET    /api/progress/stats    - Get achievement stats
+```
+
+📖 **Full API Documentation:** See [backend/README.md](backend/README.md)
+
+---
+
+## 🧪 Testing
+
+### Using Postman
+Import the collection: `backend/Areeb_API_Collection.postman_collection.json`
+
+### Using cURL
+```bash
+# Register
+curl -X POST http://localhost:5000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"password123"}'
+
+# Health check
+curl http://localhost:5000/api/health
+```
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- React 19.2.0
+- React Router DOM 7.10.1
+- Tailwind CSS 4.1.17
+- Vite 7.2.4
+- Context API
+
+### Backend
+- Node.js + Express
+- MongoDB + Mongoose
+- JWT (jsonwebtoken + bcryptjs)
+- Express Validator
+- CORS
+
+---
+
+## 📊 Database Models
+
+- **User** - Authentication and profile data
+- **Profile** - Learning preferences and onboarding info
+- **Assessment** - Quiz results and AI analysis
+- **Plan** - Learning plans and roadmap phases
+- **Progress** - Task completion and achievement tracking
+
+---
+
+## 🎯 User Flow
+
+1. **Landing** → Register/Login
+2. **Onboarding** → Set goals → Choose track → Setup profile
+3. **Assessment** → Quick check → AI analysis → Personalized quiz → Results
+4. **Planning** → Choose intensity → View generated roadmap
+5. **Dashboard** → Track progress → Complete tasks → Advance through phases
+
+---
+
+## 🔐 Security Features
+
+✅ Password hashing with bcrypt  
+✅ JWT-based authentication  
+✅ Protected API routes  
+✅ Input validation on all endpoints  
+✅ MongoDB injection protection  
+✅ CORS configuration  
+
+---
+
+## 🤖 AI Integration
+
+Currently using **mocked AI logic** for:
+- Quiz question generation
+- Topics analysis based on skill checks
+- Personalized recommendations
+
+**Ready for integration** with:
+- OpenAI GPT-4
+- Anthropic Claude
+- Google Gemini
+- Custom ML models
+
+Implementation in: `backend/services/aiService.js`
+
+---
+
+## 📦 Installation Requirements
+
+- Node.js v16+
+- MongoDB (local or MongoDB Atlas)
+- npm or yarn
+
+---
