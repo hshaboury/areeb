@@ -88,6 +88,108 @@ const generateRoadmapPhases = (track) => {
         isCompleted: false,
         progress: 0
       }
+    ],
+    fullstack: [
+      {
+        phaseId: 1,
+        title: "Frontend Foundations",
+        duration: "3-4 weeks",
+        topics: ["HTML/CSS/JS", "React Basics", "Component Design", "State Management"],
+        isCompleted: false,
+        progress: 0
+      },
+      {
+        phaseId: 2,
+        title: "Backend Foundations",
+        duration: "3-4 weeks",
+        topics: ["Node.js", "Express", "REST APIs", "MongoDB"],
+        isCompleted: false,
+        progress: 0
+      },
+      {
+        phaseId: 3,
+        title: "Full-Stack Integration",
+        duration: "3-4 weeks",
+        topics: ["API Integration", "Authentication", "CORS", "Data Flow"],
+        isCompleted: false,
+        progress: 0
+      },
+      {
+        phaseId: 4,
+        title: "Deployment & DevOps",
+        duration: "2-3 weeks",
+        topics: ["Docker", "CI/CD", "Cloud Deployment", "Monitoring"],
+        isCompleted: false,
+        progress: 0
+      }
+    ],
+    mobile: [
+      {
+        phaseId: 1,
+        title: "Mobile Basics",
+        duration: "3-4 weeks",
+        topics: ["React Native Setup", "Components", "Styling", "Navigation"],
+        isCompleted: false,
+        progress: 0
+      },
+      {
+        phaseId: 2,
+        title: "Mobile Features",
+        duration: "3-4 weeks",
+        topics: ["AsyncStorage", "API Integration", "Push Notifications", "Camera & Media"],
+        isCompleted: false,
+        progress: 0
+      },
+      {
+        phaseId: 3,
+        title: "Native Integration",
+        duration: "2-3 weeks",
+        topics: ["Native Modules", "Platform-specific Code", "Permissions", "Device Features"],
+        isCompleted: false,
+        progress: 0
+      },
+      {
+        phaseId: 4,
+        title: "App Publishing",
+        duration: "2-3 weeks",
+        topics: ["Testing", "Performance", "App Store", "Play Store"],
+        isCompleted: false,
+        progress: 0
+      }
+    ],
+    datascience: [
+      {
+        phaseId: 1,
+        title: "Python & Data Basics",
+        duration: "3-4 weeks",
+        topics: ["Python Fundamentals", "NumPy", "Pandas", "Data Visualization"],
+        isCompleted: false,
+        progress: 0
+      },
+      {
+        phaseId: 2,
+        title: "Machine Learning",
+        duration: "4-5 weeks",
+        topics: ["Supervised Learning", "Unsupervised Learning", "Model Evaluation", "Feature Engineering"],
+        isCompleted: false,
+        progress: 0
+      },
+      {
+        phaseId: 3,
+        title: "Deep Learning",
+        duration: "3-4 weeks",
+        topics: ["Neural Networks", "TensorFlow/PyTorch", "CNNs", "RNNs"],
+        isCompleted: false,
+        progress: 0
+      },
+      {
+        phaseId: 4,
+        title: "ML Projects & Deployment",
+        duration: "3-4 weeks",
+        topics: ["Model Deployment", "MLOps", "Real-world Projects", "Portfolio"],
+        isCompleted: false,
+        progress: 0
+      }
     ]
   };
 
