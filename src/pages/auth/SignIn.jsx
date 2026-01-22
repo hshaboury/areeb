@@ -1,5 +1,7 @@
-import React from 'react';
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import { login } from '../../services/authService';
+import { handleApiError } from '../../utils/auth';
 
 // Import Icons
 import areeb from '../../assets/icons/areeb-logo.svg'; 
@@ -22,6 +24,52 @@ function Logo({ className }) {
 }
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+    // Clear error when user starts typing
+    if (error) setError('');
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Validation
+    if (!formData.email || !formData.password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError('');
+
+      const response = await login({
+        email: formData.email,
+        password: formData.password
+      });
+
+      if (response.success) {
+        // Navigate to dashboard
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      setError(handleApiError(err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full flex bg-[#0A0F2B] font-['Plus_Jakarta_Sans'] overflow-hidden">
       
@@ -74,14 +122,26 @@ export default function Login() {
                 {/* ممكن تضيف سطر هنا لو حابب زي "Don't have an account?" */}
             </div>
 
-            <form className="flex flex-col gap-6">
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/50 rounded-xl p-4 text-red-400 text-sm">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 {/* Email Input */}
                 <div className="flex flex-col gap-2">
                     <label className="text-sm text-gray-400 font-medium">Email</label>
                     <input 
                         type="email" 
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
                         placeholder="Enter your email" 
                         className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white placeholder-gray-600"
+                        required
+                        disabled={loading}
                     />
                 </div>
 
@@ -90,21 +150,24 @@ export default function Login() {
                     <label className="text-sm text-gray-400 font-medium">Password</label>
                     <input 
                         type="password" 
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
                         placeholder="Enter your password"
                         className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white placeholder-gray-600"
+                        required
+                        disabled={loading}
                     />
                 </div>
 
                 {/* Sign in Button */}
-                {/* <button className="w-full h-[56px] mt-2 rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)]">
-                  Sign in
-                </button> */}
-                {/* Sign in Button with Link */}
-                <Link to="/dashboard">
-                    <button className="w-full h-[56px] mt-2 rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)]">
-                        Sign in
-                    </button>
-                </Link>
+                <button 
+                  type="submit"
+                  disabled={loading}
+                  className="w-full h-[56px] mt-2 rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? 'Signing in...' : 'Sign in'}
+                </button>
             </form>
 
             {/* Divider */}
