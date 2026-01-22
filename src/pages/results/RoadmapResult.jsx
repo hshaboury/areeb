@@ -164,7 +164,7 @@ export default function RoadmapResult() {
             
             <button 
               onClick={handleStartLearning}
-              disabled={isLoading || roadmapPhases.length === 0}
+              disabled={isLoading}
               className="px-8 h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Start Learning Journey
