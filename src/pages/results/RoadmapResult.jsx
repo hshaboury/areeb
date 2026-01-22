@@ -52,23 +52,23 @@ export default function RoadmapResult() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchRoadmap = async () => {
-      setIsLoading(true);
-      setError(null);
-      
-      try {
-        const data = await getRoadmap();
-        setRoadmapPhases(data.phases || []);
-      } catch (err) {
-        console.error('Failed to fetch roadmap:', err);
-        setError('Failed to load your roadmap. Please try again.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchRoadmap();
   }, []);
+
+  const fetchRoadmap = async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const data = await getRoadmap();
+      setRoadmapPhases(data.phases || []);
+    } catch (err) {
+      console.error('Failed to fetch roadmap:', err);
+      setError('Failed to load your roadmap. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleBack = () => {
     navigate('/results/choose-plan');
@@ -133,7 +133,7 @@ export default function RoadmapResult() {
               <p className="text-red-400 text-center text-lg">{error}</p>
               <div className="flex justify-center mt-4">
                 <button 
-                  onClick={() => window.location.reload()}
+                  onClick={fetchRoadmap}
                   className="px-6 py-2 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-all"
                 >
                   Try Again
