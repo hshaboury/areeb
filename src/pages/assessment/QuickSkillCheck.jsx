@@ -150,7 +150,7 @@ export default function QuickSkillCheck() {
         // Store results in context
         const result = {
           answers,
-          score: response.score || 0,
+          score: response.score ?? 0,
           completedAt: new Date().toISOString()
         };
         setQuickCheckResult(result);

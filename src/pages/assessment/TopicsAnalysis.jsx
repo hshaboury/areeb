@@ -62,7 +62,7 @@ export default function TopicsAnalysis() {
         });
         
         // Use response from backend if available, otherwise use mock
-        const finalAnalysis = response.data || analysis;
+        const finalAnalysis = response.data ?? analysis;
         setTopicsData(finalAnalysis);
         setTopicsAnalysis(finalAnalysis);
         

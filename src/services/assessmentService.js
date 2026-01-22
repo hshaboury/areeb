@@ -13,12 +13,8 @@ import apiClient from '../utils/apiClient';
  * @returns {Promise<object>} - Quick check results
  */
 export const submitQuickCheck = async (data) => {
-  try {
-    const response = await apiClient.post('/assessment/quick-check', data);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.post('/assessment/quick-check', data);
+  return response.data;
 };
 
 /**
@@ -30,12 +26,8 @@ export const submitQuickCheck = async (data) => {
  * @returns {Promise<object>} - Analysis results
  */
 export const analyzeTopics = async (data) => {
-  try {
-    const response = await apiClient.post('/assessment/analyze-topics', data);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.post('/assessment/analyze-topics', data);
+  return response.data;
 };
 
 /**
@@ -43,12 +35,8 @@ export const analyzeTopics = async (data) => {
  * @returns {Promise<object>} - AI quiz data
  */
 export const getAIQuiz = async () => {
-  try {
-    const response = await apiClient.get('/assessment/ai-quiz');
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.get('/assessment/ai-quiz');
+  return response.data;
 };
 
 /**
@@ -58,12 +46,8 @@ export const getAIQuiz = async () => {
  * @returns {Promise<object>} - Quiz results
  */
 export const submitAIQuiz = async (data) => {
-  try {
-    const response = await apiClient.post('/assessment/ai-quiz/submit', data);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.post('/assessment/ai-quiz/submit', data);
+  return response.data;
 };
 
 /**
@@ -71,10 +55,6 @@ export const submitAIQuiz = async (data) => {
  * @returns {Promise<object>} - Complete assessment results
  */
 export const getAssessmentResults = async () => {
-  try {
-    const response = await apiClient.get('/assessment/results');
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.get('/assessment/results');
+  return response.data;
 };
