@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAssessment, ASSESSMENT_STEPS } from '../../context/AssessmentContext';
-import { getAIQuizByTrack, analyzeAIQuizResults } from '../../data/mockAIQuiz';
+import { submitAIQuiz, getAssessmentResults } from '../../services/assessmentService';
 import areeb from '../../assets/icons/areeb-logo.svg';
 
 // Neon Effect Component
@@ -152,19 +152,28 @@ export default function AIQuizReview() {
   const [questions, setQuestions] = useState([]);
   const [results, setResults] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Load questions and analyze results
     const loadAndAnalyze = async () => {
       setIsLoading(true);
+      setError(null);
       
-      // Simulate API delay
-      setTimeout(() => {
-        const aiQuestions = getAIQuizByTrack(track);
-        setQuestions(aiQuestions);
+      try {
+        // Submit AI quiz answers
+        await submitAIQuiz({ answers: aiQuizAnswers });
         
-        // TODO: In the future, this will be an API call to get AI-analyzed results
-        const analysisResults = analyzeAIQuizResults(aiQuestions, aiQuizAnswers);
+        // Get complete assessment results
+        const response = await getAssessmentResults();
+        
+        // Backend should return:
+        // {
+        //   questions: [...],
+        //   results: { score, correct, wrong, needsLearning, strengths, weaknesses }
+        // }
+        const { questions: quizQuestions, results: analysisResults } = response;
+        
+        setQuestions(quizQuestions || []);
         setResults(analysisResults);
         setAiQuizResults(analysisResults);
         
@@ -172,7 +181,11 @@ export default function AIQuizReview() {
         completeStep(ASSESSMENT_STEPS.AI_QUIZ_REVIEW);
         
         setIsLoading(false);
-      }, 1000);
+      } catch (err) {
+        console.error('Failed to submit quiz or get results:', err);
+        setError('Failed to load results. Please try again.');
+        setIsLoading(false);
+      }
     };
 
     loadAndAnalyze();
@@ -189,6 +202,22 @@ export default function AIQuizReview() {
         <div className="flex flex-col items-center gap-4">
           <div className="w-16 h-16 rounded-full border-4 border-[#7033FF] border-t-transparent animate-spin"></div>
           <div className="text-[#EAEDFA] text-xl font-['Space_Grotesk']">Analyzing your responses...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#0A0F2B]">
+        <div className="text-center">
+          <div className="text-red-300 text-xl mb-4">{error}</div>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-white"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAssessment, ASSESSMENT_STEPS } from '../../context/AssessmentContext';
-import { getAIQuizByTrack } from '../../data/mockAIQuiz';
+import { getAIQuiz } from '../../services/assessmentService';
 import areeb from '../../assets/icons/areeb-logo.svg';
 
 // Neon Effect Component
@@ -154,22 +154,29 @@ export default function AIQuiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState(aiQuizAnswers || {});
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // TODO: In the future, this will be an API call to fetch AI-generated questions
-    // based on the user's track, skill level, and topics analysis
     const loadQuestions = async () => {
       setIsLoading(true);
-      // Simulate API delay
-      setTimeout(() => {
-        const aiQuestions = getAIQuizByTrack(track);
+      setError(null);
+      
+      try {
+        const response = await getAIQuiz();
+        
+        // Backend should return { questions: [...] }
+        const aiQuestions = response.questions || response;
         setQuestions(aiQuestions);
         setIsLoading(false);
-      }, 500);
+      } catch (err) {
+        console.error('Failed to fetch AI quiz:', err);
+        setError('Failed to load quiz. Please try again.');
+        setIsLoading(false);
+      }
     };
 
     loadQuestions();
-  }, [track]);
+  }, []);
 
   const currentQuestion = questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
@@ -192,7 +199,6 @@ export default function AIQuiz() {
         // Complete step 3 (AI Quiz)
         completeStep(ASSESSMENT_STEPS.AI_QUIZ);
         
-        // TODO: In the future, send answers to backend for AI analysis
         navigate('/assessment/ai-quiz-review');
       }
     } else {
@@ -219,6 +225,22 @@ export default function AIQuiz() {
           </div>
           <div className="text-[#EAEDFA] text-xl font-['Space_Grotesk']">AI is preparing your personalized quiz...</div>
           <div className="text-[#EAEDFA]/60 text-sm">Based on your track and previous assessments</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#0A0F2B]">
+        <div className="text-center">
+          <div className="text-red-300 text-xl mb-4">{error}</div>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-white"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );
