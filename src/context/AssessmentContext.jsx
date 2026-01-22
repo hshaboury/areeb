@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 
 // Assessment flow steps - for route protection
+// eslint-disable-next-line react-refresh/only-export-components
 export const ASSESSMENT_STEPS = {
   PROFILE: 0,
   QUICK_SKILL_CHECK: 1,

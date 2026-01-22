@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useOnboarding } from '../../context/OnboardingContext';
+import { useAssessment } from '../../context/AssessmentContext';
 
 // Import Icons
 import areeb from '../../assets/icons/areeb-logo.svg'; 
@@ -44,7 +46,8 @@ const ArrowRight = () => (
 );
 
 // --- Option Button ---
-const OptionButton = ({ label, icon: Icon, isSelected, onClick }) => {
+const OptionButton = ({ label, icon, isSelected, onClick }) => {
+    const Icon = icon;
     const getActiveStyle = () => {
         // Levels Logic
         if (label === "Beginner") return "bg-[#7033FF] border-[#7033FF] shadow-[0_0_15px_rgba(112,51,255,0.4)]";
@@ -157,24 +160,58 @@ const ANSWER_OPTIONS = [
 ];
 
 export default function Track() {
+  const navigate = useNavigate();
+  const { updateOnboardingData } = useOnboarding();
+  const { setSelectedTrack: setAssessmentTrack } = useAssessment();
+  
   const [selectedTrack, setSelectedTrack] = useState("");
-  const [selectedLevel, setSelectedLevel] = useState(null); // New state for Level
+  const [selectedLevel, setSelectedLevel] = useState(null);
   const [skills, setSkills] = useState({});
+
+  const trackMapping = {
+    'UI/UX Design': 'uiux',
+    'Front-End Development': 'frontend',
+    'Back-End Development': 'backend'
+  };
+
+  const levelMapping = {
+    'Beginner': 'beginner',
+    'Intermediate': 'intermediate',
+    'Professional': 'advanced'
+  };
 
   const handleTrackChange = (e) => {
       const newTrack = e.target.value;
       setSelectedTrack(newTrack);
-      setSelectedLevel(null); // Reset level when track changes
-      setSkills({}); // Reset answers
+      setSelectedLevel(null);
+      setSkills({});
   };
 
   const handleLevelChange = (level) => {
       setSelectedLevel(level);
-      setSkills({}); // Reset answers when level changes (optional)
+      setSkills({});
   };
 
   const handleSkillChange = (question, value) => {
       setSkills(prev => ({ ...prev, [question]: value }));
+  };
+
+  const handleContinue = () => {
+    if (!selectedTrack || !selectedLevel) {
+      return;
+    }
+
+    const trackValue = trackMapping[selectedTrack] || selectedTrack.toLowerCase().replace(/\s+/g, '');
+    const levelValue = levelMapping[selectedLevel] || selectedLevel.toLowerCase();
+
+    updateOnboardingData({
+      selectedTrack: trackValue,
+      skillLevel: levelValue
+    });
+
+    setAssessmentTrack(trackValue);
+    
+    navigate('/profile');
   };
 
   return (
@@ -191,10 +228,10 @@ export default function Track() {
         </div>
 
         <div className="relative z-10 flex flex-col gap-10">
-            <Link to="/" className="flex items-center gap-3 w-fit">
+            <a href="/" className="flex items-center gap-3 w-fit">
                 <Logo className="w-8 h-8" />
                 <span className="text-2xl font-semibold text-[#EAEDFA] font-['Space_Grotesk'] tracking-wide">AREEB</span>
-            </Link>
+            </a>
             <div className="flex flex-row items-end justify-between w-full gap-4 mt-100 mb-8">
               <h1 className="text-[56px] font-bold font-['Space_Grotesk'] leading-[1.1] text-[#EAEDFA]">Get Started <br /> with us</h1>
               <p className="text-xl font-medium text-[#EAEDFA] max-w-[400px] text-left pb-6">Choose your preferred track to start <br/> your learning journey</p>
@@ -296,14 +333,16 @@ export default function Track() {
                     Quick Skill Check (optional) 
                     <br />help us fine-tune your roadmap
                 </p>
-                <Link to="/profile">
-                    <button className="w-full h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)] flex items-center justify-between px-6">
-                        <span>Continue</span>
-                        <div className="bg-white/20 rounded-full p-1">
-                            <ArrowRight />
-                        </div>
-                    </button>
-                </Link>
+                <button 
+                    onClick={handleContinue}
+                    disabled={!selectedTrack || !selectedLevel}
+                    className="w-full h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)] flex items-center justify-between px-6 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    <span>Continue</span>
+                    <div className="bg-white/20 rounded-full p-1">
+                        <ArrowRight />
+                    </div>
+                </button>
             </div>
 
         </div>

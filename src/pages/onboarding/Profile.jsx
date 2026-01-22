@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import { useOnboarding } from '../../context/OnboardingContext';
+import { completeOnboarding } from '../../services/profileService';
 // Import Images & Icons
 import defaultAvatar from '../../assets/images/mypic.jpg'; 
 import areeb from '../../assets/icons/areeb-logo.svg'; 
@@ -34,10 +36,26 @@ const LinkIcon = () => (
 );
 
 export default function Profile() {
-  // حالة للصورة (للعرض فقط)
+  const navigate = useNavigate();
+  const { onboardingData, resetOnboardingData } = useOnboarding();
+  
   const [image, setImage] = useState(defaultAvatar);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    bio: '',
+    linkedIn: '',
+    github: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  // دالة وهمية لرفع الصورة
+  useEffect(() => {
+    if (!onboardingData.selectedTrack || !onboardingData.skillLevel) {
+      navigate('/track');
+    }
+  }, [onboardingData, navigate]);
+
   const handleImageUpload = (e) => {
       const file = e.target.files[0];
       if (file) {
@@ -47,6 +65,47 @@ export default function Profile() {
           };
           reader.readAsDataURL(file);
       }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+      
+      const onboardingPayload = {
+        learningGoals: onboardingData.learningGoals,
+        studyStyle: onboardingData.studyStyle,
+        availableHours: onboardingData.availableHours,
+        selectedTrack: onboardingData.selectedTrack,
+        skillLevel: onboardingData.skillLevel,
+        name: fullName,
+        linkedIn: formData.linkedIn || undefined,
+        github: formData.github || undefined
+      };
+
+      await completeOnboarding(onboardingPayload);
+      
+      resetOnboardingData();
+      
+      navigate('/assessment/quick-skill-check');
+    } catch (err) {
+      console.error('Onboarding error:', err);
+      setError(err.response?.data?.message || 'Failed to complete onboarding. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    navigate('/track');
   };
 
   return (
@@ -65,12 +124,12 @@ export default function Profile() {
 
         {/* Logo & Header */}
         <div className="relative z-10 flex flex-col gap-10">
-            <Link to="/" className="flex items-center gap-3 w-fit">
+            <a href="/" className="flex items-center gap-3 w-fit">
                 <Logo className="w-8 h-8" />
                 <span className="text-2xl font-semibold text-[#EAEDFA] font-['Space_Grotesk'] tracking-wide">
                     AREEB
                 </span>
-            </Link>
+            </a>
 
             <div className="flex flex-row items-end justify-between w-full gap-4 mt-100 mb-8">
               <h1 className="text-[56px] font-bold font-['Space_Grotesk'] leading-[1.1] text-[#EAEDFA]">
@@ -129,6 +188,12 @@ export default function Profile() {
             
             <h2 className="text-[42px] font-bold font-['Space_Grotesk'] text-white mb-6">Profile Setup</h2>
 
+            {error && (
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/50 text-red-400 text-sm mb-4">
+                    {error}
+                </div>
+            )}
+
             {/* Profile Image Upload */}
             <div className="relative w-28 h-28 mb-8 group cursor-pointer">
                 <div className="w-full h-full rounded-full overflow-hidden border-2 border-[#7033FF] p-1">
@@ -141,21 +206,35 @@ export default function Profile() {
                 </label>
             </div>
 
-            <form className="flex flex-col gap-5 overflow-y-auto no-scrollbar pr-2 max-h-[65vh]">
+            <form className="flex flex-col gap-5 overflow-y-auto no-scrollbar pr-2 max-h-[65vh]" onSubmit={handleSubmit}>
                 
                 {/* Row 1: Names */}
                 <div className="flex gap-4">
                     <div className="flex-1 flex flex-col gap-2">
                         <label className="text-sm text-gray-400 font-medium">First name</label>
                         <div className="relative">
-                            <input type="text" placeholder="Text box" className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white placeholder-gray-600" />
+                            <input 
+                                type="text" 
+                                name="firstName"
+                                value={formData.firstName}
+                                onChange={handleInputChange}
+                                placeholder="First name" 
+                                className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white placeholder-gray-600" 
+                            />
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"><PencilIcon /></div>
                         </div>
                     </div>
                     <div className="flex-1 flex flex-col gap-2">
                         <label className="text-sm text-gray-400 font-medium">Last name</label>
                         <div className="relative">
-                            <input type="text" placeholder="Text box" className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white placeholder-gray-600" />
+                            <input 
+                                type="text" 
+                                name="lastName"
+                                value={formData.lastName}
+                                onChange={handleInputChange}
+                                placeholder="Last name" 
+                                className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white placeholder-gray-600" 
+                            />
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"><PencilIcon /></div>
                         </div>
                     </div>
@@ -165,7 +244,14 @@ export default function Profile() {
                 <div className="flex flex-col gap-2">
                     <label className="text-sm text-gray-400 font-medium">Bio</label>
                     <div className="relative">
-                        <input type="text" placeholder="Text box" className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white placeholder-gray-600" />
+                        <input 
+                            type="text" 
+                            name="bio"
+                            value={formData.bio}
+                            onChange={handleInputChange}
+                            placeholder="Tell us about yourself" 
+                            className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white placeholder-gray-600" 
+                        />
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"><PencilIcon /></div>
                     </div>
                 </div>
@@ -174,24 +260,56 @@ export default function Profile() {
                 <div className="flex gap-4">
                     <div className="flex-1 flex flex-col gap-2">
                         <label className="text-sm text-gray-400 font-medium">Track</label>
-                        {/* هذا الحقل يمكن أن يكون ReadOnly لأنه جاي من الخطوة السابقة */}
                         <div className="relative">
-                            <input type="text" placeholder="Selected Track" readOnly className="w-full h-[56px] px-4 bg-white/5 border border-[#EAEDFA]/20 rounded-xl outline-none text-white/70 cursor-not-allowed" />
+                            <input 
+                                type="text" 
+                                value={onboardingData.selectedTrack} 
+                                readOnly 
+                                className="w-full h-[56px] px-4 bg-white/5 border border-[#EAEDFA]/20 rounded-xl outline-none text-white/70 cursor-not-allowed" 
+                            />
                         </div>
                     </div>
                     <div className="flex-1 flex flex-col gap-2">
                         <label className="text-sm text-gray-400 font-medium">Skill level</label>
                         <div className="relative">
-                            <input type="text" placeholder="Selected Skill Level" readOnly className="w-full h-[56px] px-4 bg-white/5 border border-[#EAEDFA]/20 rounded-xl outline-none text-white/70 cursor-not-allowed" />
+                            <input 
+                                type="text" 
+                                value={onboardingData.skillLevel} 
+                                readOnly 
+                                className="w-full h-[56px] px-4 bg-white/5 border border-[#EAEDFA]/20 rounded-xl outline-none text-white/70 cursor-not-allowed" 
+                            />
                         </div>
                     </div>
                 </div>
 
-                {/* Row 4: Optional Links */}
+                {/* Row 4: LinkedIn */}
                 <div className="flex flex-col gap-2">
-                    <label className="text-sm text-gray-400 font-medium">Optional links</label>
+                    <label className="text-sm text-gray-400 font-medium">LinkedIn (optional)</label>
                     <div className="relative">
-                        <input type="text" placeholder="Text box" className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white placeholder-gray-600" />
+                        <input 
+                            type="text" 
+                            name="linkedIn"
+                            value={formData.linkedIn}
+                            onChange={handleInputChange}
+                            placeholder="LinkedIn profile URL" 
+                            className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white placeholder-gray-600" 
+                        />
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"><LinkIcon /></div>
+                    </div>
+                </div>
+
+                {/* Row 5: GitHub */}
+                <div className="flex flex-col gap-2">
+                    <label className="text-sm text-gray-400 font-medium">GitHub (optional)</label>
+                    <div className="relative">
+                        <input 
+                            type="text" 
+                            name="github"
+                            value={formData.github}
+                            onChange={handleInputChange}
+                            placeholder="GitHub profile URL" 
+                            className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white placeholder-gray-600" 
+                        />
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"><LinkIcon /></div>
                     </div>
                 </div>
@@ -200,16 +318,22 @@ export default function Profile() {
 
             {/* Actions Buttons */}
             <div className="flex gap-4 mt-8 pt-4 border-t border-gray-800">
-                <button className="flex-1 h-[56px] rounded-full border border-gray-600 text-white text-lg font-medium font-['Space_Grotesk'] hover:border-white hover:bg-white/5 transition-all">
+                <button 
+                    type="button"
+                    onClick={handleCancel}
+                    disabled={loading}
+                    className="flex-1 h-[56px] rounded-full border border-gray-600 text-white text-lg font-medium font-['Space_Grotesk'] hover:border-white hover:bg-white/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                     Cancel
                 </button>
                 
-                {/* Link to assessment quick skill check */}
-                <Link to="/assessment/quick-skill-check" className="flex-1">
-                    <button className="w-full h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)]">
-                        Save Profile
-                    </button>
-                </Link>
+                <button 
+                    type="submit"
+                    disabled={loading}
+                    className="flex-1 h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {loading ? 'Saving...' : 'Save Profile'}
+                </button>
             </div>
 
         </div>

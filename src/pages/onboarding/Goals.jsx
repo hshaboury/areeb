@@ -1,5 +1,6 @@
-import React from 'react';
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { useOnboarding } from '../../context/OnboardingContext';
 
 // Import Icons
 import areeb from '../../assets/icons/areeb-logo.svg'; 
@@ -27,6 +28,59 @@ const ChevronDown = () => (
 );
 
 export default function Goals() {
+  const navigate = useNavigate();
+  const { updateOnboardingData } = useOnboarding();
+  
+  const [formData, setFormData] = useState({
+    learningGoals: '',
+    studyStyle: '',
+    availableHours: '',
+    reminders: ''
+  });
+  
+  const [errors, setErrors] = useState({});
+
+  const convertHoursToNumber = (hoursText) => {
+    if (hoursText === '5-10 hours') return 10;
+    if (hoursText === '10-20 hours') return 20;
+    if (hoursText === '+20 hours') return 30;
+    return 0;
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.learningGoals) newErrors.learningGoals = 'Please select your goal';
+    if (!formData.studyStyle) newErrors.studyStyle = 'Please select your learning preference';
+    if (!formData.availableHours) newErrors.availableHours = 'Please select available hours';
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    updateOnboardingData({
+      learningGoals: [formData.learningGoals],
+      studyStyle: formData.studyStyle,
+      availableHours: convertHoursToNumber(formData.availableHours)
+    });
+    
+    navigate('/track');
+  };
+
   return (
     <div className="min-h-screen w-full flex bg-[#0A0F2B] font-['Plus_Jakarta_Sans'] overflow-hidden">
       
@@ -43,12 +97,12 @@ export default function Goals() {
 
         {/* --- Content Top: Logo --- */}
         <div className="relative z-10 flex flex-col gap-10">
-            <Link to="/" className="flex items-center gap-3 w-fit">
+            <a href="/" className="flex items-center gap-3 w-fit">
                 <Logo className="w-8 h-8" />
                 <span className="text-2xl font-semibold text-[#EAEDFA] font-['Space_Grotesk'] tracking-wide">
                     AREEB
                 </span>
-            </Link>
+            </a>
 
             {/* Text Area (Same positioning as Register) */}
             <div className="flex flex-row items-end justify-between w-full gap-4 mt-100 mb-8">
@@ -117,65 +171,88 @@ export default function Goals() {
             {/* Title */}
             <h2 className="text-[49px] font-bold font-['Space_Grotesk'] text-white mb-4">Goals & Preferences</h2>
 
-            <form className="flex flex-col gap-6">
+            <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
                 
                 {/* 1. Current Goal */}
                 <div className="flex flex-col gap-2 relative">
                     <label className="text-sm text-gray-400 font-medium">What's your current goal?</label>
                     <div className="relative">
-                        <select className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white appearance-none cursor-pointer">
-                            <option className="bg-[#0A0F2B]" value="" disabled selected>Select your goal</option>
-                            <option className="bg-[#0A0F2B]">Learn a new skill</option>
-                            <option className="bg-[#0A0F2B]">Get an internship</option>
-                            <option className="bg-[#0A0F2B]">Find a job</option>
+                        <select 
+                            name="learningGoals"
+                            value={formData.learningGoals}
+                            onChange={handleInputChange}
+                            className={`w-full h-[56px] px-4 bg-transparent border ${errors.learningGoals ? 'border-red-500' : 'border-[#EAEDFA]/20'} rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white appearance-none cursor-pointer`}
+                        >
+                            <option className="bg-[#0A0F2B]" value="">Select your goal</option>
+                            <option className="bg-[#0A0F2B]" value="Learn a new skill">Learn a new skill</option>
+                            <option className="bg-[#0A0F2B]" value="Get an internship">Get an internship</option>
+                            <option className="bg-[#0A0F2B]" value="Find a job">Find a job</option>
                         </select>
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                             <ChevronDown />
                         </div>
                     </div>
+                    {errors.learningGoals && <span className="text-red-500 text-xs">{errors.learningGoals}</span>}
                 </div>
 
                 {/* 2. Study Time */}
                 <div className="flex flex-col gap-2 relative">
                     <label className="text-sm text-gray-400 font-medium">How much time can you study per week?</label>
                     <div className="relative">
-                         <select className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white appearance-none cursor-pointer">
-                            <option className="bg-[#0A0F2B]" value="" disabled selected>Select hours</option>
-                            <option className="bg-[#0A0F2B]">5-10 hours</option>
-                            <option className="bg-[#0A0F2B]">10-20 hours</option>
-                            <option className="bg-[#0A0F2B]">+20 hours</option>
+                         <select 
+                            name="availableHours"
+                            value={formData.availableHours}
+                            onChange={handleInputChange}
+                            className={`w-full h-[56px] px-4 bg-transparent border ${errors.availableHours ? 'border-red-500' : 'border-[#EAEDFA]/20'} rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white appearance-none cursor-pointer`}
+                         >
+                            <option className="bg-[#0A0F2B]" value="">Select hours</option>
+                            <option className="bg-[#0A0F2B]" value="5-10 hours">5-10 hours</option>
+                            <option className="bg-[#0A0F2B]" value="10-20 hours">10-20 hours</option>
+                            <option className="bg-[#0A0F2B]" value="+20 hours">+20 hours</option>
                         </select>
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                             <ChevronDown />
                         </div>
                     </div>
+                    {errors.availableHours && <span className="text-red-500 text-xs">{errors.availableHours}</span>}
                 </div>
 
                 {/* 3. Learning Preference */}
                 <div className="flex flex-col gap-2 relative">
                     <label className="text-sm text-gray-400 font-medium">How do you prefer to learn?</label>
                     <div className="relative">
-                        <select className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white appearance-none cursor-pointer">
-                            <option className="bg-[#0A0F2B]" value="" disabled selected>Select preference</option>
-                            <option className="bg-[#0A0F2B]">Videos</option>
-                            <option className="bg-[#0A0F2B]">Reading / Articles</option>
-                            <option className="bg-[#0A0F2B]">Interactive Projects</option>
+                        <select 
+                            name="studyStyle"
+                            value={formData.studyStyle}
+                            onChange={handleInputChange}
+                            className={`w-full h-[56px] px-4 bg-transparent border ${errors.studyStyle ? 'border-red-500' : 'border-[#EAEDFA]/20'} rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white appearance-none cursor-pointer`}
+                        >
+                            <option className="bg-[#0A0F2B]" value="">Select preference</option>
+                            <option className="bg-[#0A0F2B]" value="Videos">Videos</option>
+                            <option className="bg-[#0A0F2B]" value="Reading / Articles">Reading / Articles</option>
+                            <option className="bg-[#0A0F2B]" value="Interactive Projects">Interactive Projects</option>
                         </select>
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                             <ChevronDown />
                         </div>
                     </div>
+                    {errors.studyStyle && <span className="text-red-500 text-xs">{errors.studyStyle}</span>}
                 </div>
 
                 {/* 4. Reminders */}
                 <div className="flex flex-col gap-2 relative">
                     <label className="text-sm text-gray-400 font-medium">How would you like to get reminded and updated?</label>
                     <div className="relative">
-                        <select className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white appearance-none cursor-pointer">
-                            <option className="bg-[#0A0F2B]" value="" disabled selected>Select option</option>
-                            <option className="bg-[#0A0F2B]">Daily</option>
-                            <option className="bg-[#0A0F2B]">Weekly</option>
-                            <option className="bg-[#0A0F2B]">No reminders</option>
+                        <select 
+                            name="reminders"
+                            value={formData.reminders}
+                            onChange={handleInputChange}
+                            className="w-full h-[56px] px-4 bg-transparent border border-[#EAEDFA]/20 rounded-xl outline-none focus:border-[#B899FF] focus:bg-white/5 transition-all text-white appearance-none cursor-pointer"
+                        >
+                            <option className="bg-[#0A0F2B]" value="">Select option</option>
+                            <option className="bg-[#0A0F2B]" value="Daily">Daily</option>
+                            <option className="bg-[#0A0F2B]" value="Weekly">Weekly</option>
+                            <option className="bg-[#0A0F2B]" value="No reminders">No reminders</option>
                         </select>
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                             <ChevronDown />
@@ -184,12 +261,12 @@ export default function Goals() {
                 </div>
 
                 {/* Submit Btn */}
-                {/* Linked to next page, assumed '/track' */}
-                <Link to="/track"> 
-                    <button className="w-full h-[56px] mt-6 rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)]">
-                        Save & continue
-                    </button>
-                </Link>
+                <button 
+                    type="submit"
+                    className="w-full h-[56px] mt-6 rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)]"
+                >
+                    Save & continue
+                </button>
             </form>
             
             {/* No Footer Links in this step based on screenshot */}
