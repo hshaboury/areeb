@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAssessment, ASSESSMENT_STEPS } from '../../context/AssessmentContext';
+import { analyzeTopics } from '../../services/assessmentService';
 import areeb from '../../assets/icons/areeb-logo.svg';
 import TopicStatusRow from '../../components/ui/TopicStatusRow';
 import { mockTopicsAnalysis } from '../../data/mockRoadmap';
@@ -39,28 +40,43 @@ const ArrowRight = () => (
 
 export default function TopicsAnalysis() {
   const navigate = useNavigate();
+  // quickCheckResult is kept for potential future use
+  // eslint-disable-next-line no-unused-vars
   const { quickCheckResult, setTopicsAnalysis, completeStep } = useAssessment();
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [topicsData, setTopicsData] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // TODO: In the future, this will be an API call to analyze quick check results
-    // and determine user's proficiency in different topics
     const analyzeQuickCheck = async () => {
       setIsAnalyzing(true);
+      setError(null);
       
-      // Simulate AI analysis delay
-      setTimeout(() => {
-        // For now, use mock data
+      try {
+        // Use mock data for initial display (backend will send back topics analysis)
         const analysis = mockTopicsAnalysis;
-        setTopicsData(analysis);
-        setTopicsAnalysis(analysis);
+        
+        // Submit to backend for analysis
+        const response = await analyzeTopics({
+          proficientTopics: analysis.proficient,
+          needsReviewTopics: analysis.needsReview,
+          needsLearningTopics: analysis.needsLearning
+        });
+        
+        // Use response from backend if available, otherwise use mock
+        const finalAnalysis = response.data ?? analysis;
+        setTopicsData(finalAnalysis);
+        setTopicsAnalysis(finalAnalysis);
         
         // Complete step 2 (Topics Analysis)
         completeStep(ASSESSMENT_STEPS.TOPICS_ANALYSIS);
         
         setIsAnalyzing(false);
-      }, 1500);
+      } catch (err) {
+        console.error('Failed to analyze topics:', err);
+        setError('Failed to analyze topics. Please try again.');
+        setIsAnalyzing(false);
+      }
     };
 
     analyzeQuickCheck();
@@ -77,6 +93,22 @@ export default function TopicsAnalysis() {
         <div className="flex flex-col items-center gap-4">
           <div className="w-16 h-16 rounded-full border-4 border-[#7033FF] border-t-transparent animate-spin"></div>
           <div className="text-[#EAEDFA] text-xl font-['Space_Grotesk']">Analyzing your skills...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#0A0F2B]">
+        <div className="text-center">
+          <div className="text-red-300 text-xl mb-4">{error}</div>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-white"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );

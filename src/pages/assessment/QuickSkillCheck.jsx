@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAssessment, ASSESSMENT_STEPS } from '../../context/AssessmentContext';
 import { getQuestionsByTrack } from '../../data/mockQuiz';
+import { submitQuickCheck } from '../../services/assessmentService';
 import areeb from '../../assets/icons/areeb-logo.svg';
 
 // Neon Effect Component
@@ -101,6 +102,8 @@ export default function QuickSkillCheck() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     // TODO: In the future, this will be an API call to fetch quick check questions
@@ -132,31 +135,35 @@ export default function QuickSkillCheck() {
     });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (isLastQuestion) {
-      // Calculate score
-      let score = 0;
-      questions.forEach((question) => {
-        const userAnswer = answers[question.id];
-        const correctAnswer = question.answers.find(a => a.isCorrect);
-        if (correctAnswer && userAnswer === correctAnswer.id) {
-          score++;
-        }
-      });
+      setIsSubmitting(true);
+      setError(null);
 
-      // Store results in context
-      const result = {
-        answers,
-        score: Math.round((score / questions.length) * 100),
-        completedAt: new Date().toISOString()
-      };
-      setQuickCheckResult(result);
-      
-      // Complete step 1 (Quick Skill Check)
-      completeStep(ASSESSMENT_STEPS.QUICK_SKILL_CHECK);
-      
-      // TODO: In the future, send results to backend for AI analysis
-      navigate('/assessment/topics-analysis');
+      try {
+        // Submit to backend
+        const response = await submitQuickCheck({
+          answers,
+          track: selectedTrack
+        });
+
+        // Store results in context
+        const result = {
+          answers,
+          score: response.score ?? 0,
+          completedAt: new Date().toISOString()
+        };
+        setQuickCheckResult(result);
+        
+        // Complete step 1 (Quick Skill Check)
+        completeStep(ASSESSMENT_STEPS.QUICK_SKILL_CHECK);
+        
+        navigate('/assessment/topics-analysis');
+      } catch (err) {
+        console.error('Failed to submit quick check:', err);
+        setError('Failed to submit assessment. Please try again.');
+        setIsSubmitting(false);
+      }
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
@@ -168,10 +175,12 @@ export default function QuickSkillCheck() {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isSubmitting) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center bg-[#0A0F2B]">
-        <div className="text-[#EAEDFA] text-xl">Loading questions...</div>
+        <div className="text-[#EAEDFA] text-xl">
+          {isLoading ? 'Loading questions...' : 'Submitting your assessment...'}
+        </div>
       </div>
     );
   }
@@ -241,6 +250,13 @@ export default function QuickSkillCheck() {
               selectedAnswer={answers[currentQuestion.id]}
               onSelectAnswer={handleSelectAnswer}
             />
+          )}
+
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-red-300 text-center mb-4">
+              {error}
+            </div>
           )}
 
           {/* Navigation Buttons */}

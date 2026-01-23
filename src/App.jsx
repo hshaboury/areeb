@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AssessmentProvider } from "./context/AssessmentContext";
+import { OnboardingProvider } from "./context/OnboardingContext";
 import Landing from "./pages/public/Landing";
 import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
@@ -21,7 +22,8 @@ import Community from "./pages/dashboard/Community";
 function App() {
   return (
     <AssessmentProvider>
-      <Router>
+      <OnboardingProvider>
+        <Router>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<SignIn />} />
@@ -48,6 +50,7 @@ function App() {
           <Route path="/dashboard/community" element={<Community />} />
         </Routes>
       </Router>
+      </OnboardingProvider>
     </AssessmentProvider>
   );
 }

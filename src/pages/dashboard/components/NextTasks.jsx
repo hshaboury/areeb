@@ -37,7 +37,13 @@ const taskIcons = {
   project: ProjectIcon
 };
 
-export default function NextTasks({ tasks, title = "Next Steps" }) {
+export default function NextTasks({ tasks, title = "Next Steps", onTaskComplete, processingTask }) {
+  const handleTaskClick = (task) => {
+    if (!task.completed && onTaskComplete && processingTask !== task.id) {
+      onTaskComplete(task.id);
+    }
+  };
+
   return (
     <div className="bg-white/5 border border-[#EAEDFA]/10 rounded-xl p-6 backdrop-blur-sm">
       <h3 className="text-lg font-bold text-[#EAEDFA] font-['Space_Grotesk'] mb-4">
@@ -47,15 +53,19 @@ export default function NextTasks({ tasks, title = "Next Steps" }) {
       <div className="space-y-3">
         {tasks.map((task) => {
           const Icon = taskIcons[task.type] || StudyIcon;
+          const isProcessing = processingTask === task.id;
           
           return (
             <div
               key={task.id}
+              onClick={() => handleTaskClick(task)}
               className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
                 task.completed
                   ? 'bg-green-500/10 border border-green-500/20'
-                  : 'bg-white/5 border border-[#EAEDFA]/10 hover:border-[#7033FF]/30'
-              }`}
+                  : onTaskComplete 
+                    ? 'bg-white/5 border border-[#EAEDFA]/10 hover:border-[#7033FF]/30 cursor-pointer'
+                    : 'bg-white/5 border border-[#EAEDFA]/10'
+              } ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}
             >
               {/* Checkbox/Check Icon */}
               <div className={`flex-shrink-0 w-6 h-6 rounded flex items-center justify-center ${
@@ -64,6 +74,9 @@ export default function NextTasks({ tasks, title = "Next Steps" }) {
                   : 'bg-white/5 border border-[#EAEDFA]/20'
               }`}>
                 {task.completed && <CheckIcon />}
+                {isProcessing && (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#7033FF]"></div>
+                )}
               </div>
 
               {/* Task Icon */}

@@ -1,7 +1,7 @@
 import React from 'react';
 import NextTasks from './NextTasks';
 
-export default function PhaseCard({ phase, isExpanded = false }) {
+export default function PhaseCard({ phase, isExpanded = false, onTaskComplete, processingTask }) {
   const completedTasks = phase.tasks.filter(task => task.completed).length;
   const totalTasks = phase.tasks.length;
   
@@ -66,7 +66,12 @@ export default function PhaseCard({ phase, isExpanded = false }) {
 
         {/* Tasks */}
         {phase.tasks && phase.tasks.length > 0 && (
-          <NextTasks tasks={phase.tasks} title="Tasks" />
+          <NextTasks 
+            tasks={phase.tasks} 
+            title="Tasks"
+            onTaskComplete={onTaskComplete}
+            processingTask={processingTask}
+          />
         )}
 
         {/* Progress Bar */}
