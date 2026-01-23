@@ -173,9 +173,10 @@ export default function AIQuizReview() {
         //   questions: [...],
         //   results: { score, correct, wrong, needsLearning, strengths, weaknesses }
         // }
-        const { questions: quizQuestions, results: analysisResults } = response;
-        
-        setQuestions(quizQuestions || []);
+        const quizQuestions = response?.assessment?.aiQuiz?.questions || [];
+        const analysisResults = response?.assessment?.aiQuiz?.results;
+
+        setQuestions(quizQuestions);
         setResults(analysisResults);
         setAiQuizResults(analysisResults);
         
@@ -357,7 +358,7 @@ export default function AIQuizReview() {
           {/* Next Step Info */}
           <div className="bg-gradient-to-r from-[#7033FF]/10 to-[#B899FF]/10 border border-[#7033FF]/30 rounded-2xl p-6 backdrop-blur-sm mb-6">
             <h3 className="text-lg font-semibold font-['Space_Grotesk'] text-[#EAEDFA] mb-2">
-              🎯 Next Step: Choose Your Learning Plan
+              Next Step: Choose Your Learning Plan
             </h3>
             <p className="text-[#EAEDFA]/70">
               Based on your assessment, we&apos;ll create a personalized learning roadmap tailored to your schedule and goals.

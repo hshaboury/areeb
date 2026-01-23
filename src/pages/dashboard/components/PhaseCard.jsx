@@ -2,8 +2,9 @@ import React from 'react';
 import NextTasks from './NextTasks';
 
 export default function PhaseCard({ phase, isExpanded = false, onTaskComplete, processingTask }) {
-  const completedTasks = phase.tasks.filter(task => task.completed).length;
-  const totalTasks = phase.tasks.length;
+  const tasks = Array.isArray(phase.tasks) ? phase.tasks : [];
+  const completedTasks = tasks.filter(task => task.completed).length;
+  const totalTasks = tasks.length;
   
   return (
     <div className={`bg-white/5 border rounded-2xl overflow-hidden transition-all ${
@@ -65,9 +66,9 @@ export default function PhaseCard({ phase, isExpanded = false, onTaskComplete, p
         )}
 
         {/* Tasks */}
-        {phase.tasks && phase.tasks.length > 0 && (
+        {tasks.length > 0 && (
           <NextTasks 
-            tasks={phase.tasks} 
+            tasks={tasks} 
             title="Tasks"
             onTaskComplete={onTaskComplete}
             processingTask={processingTask}

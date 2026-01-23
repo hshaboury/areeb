@@ -30,6 +30,6 @@ export const getCurrentPlan = async () => {
  * @returns {Promise<object>} - Roadmap data
  */
 export const getRoadmap = async () => {
-  const response = await apiClient.get('/roadmap');
+  const response = await apiClient.get('/plans/roadmap');
   return response.data;
 };

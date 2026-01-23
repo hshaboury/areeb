@@ -38,10 +38,19 @@ const icons = {
   crown: CrownIcon
 };
 
-export default function ProgressStats({ stats }) {
+// export default function ProgressStats({ stats }) {
+export default function ProgressStats({ stats = [] }) {
+  const statsArray = Array.isArray(stats)
+    ? stats
+    : [
+        { label: 'Completed Tasks', value: stats.completedTasks ?? 0, icon: 'trophy' },
+        { label: 'Current Phase', value: stats.currentPhase ?? 0, icon: 'star' },
+        { label: 'Progress %', value: stats.progress ?? 0, icon: 'fire' },
+        { label: 'Achievements', value: stats.achievements ?? 0, icon: 'crown' },
+      ];
   return (
     <div className="grid grid-cols-4 gap-4 mb-6">
-      {stats.map((stat, index) => {
+      {statsArray.map((stat, index) => {
         const Icon = icons[stat.icon] || TrophyIcon;
         
         return (

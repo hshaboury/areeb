@@ -132,7 +132,7 @@ export default function ChoosePlan() {
           {/* Info Box */}
           <div className="bg-white/5 border border-[#EAEDFA]/10 rounded-2xl p-6 backdrop-blur-sm mb-6">
             <h3 className="text-lg font-semibold font-['Space_Grotesk'] text-[#EAEDFA] mb-2">
-              💡 Tip: Be Realistic
+              Be Realistic
             </h3>
             <p className="text-[#EAEDFA]/70">
               Choose a plan that matches your actual availability. Consistency is more important than intensity. You can always speed up or slow down as you progress.

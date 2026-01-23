@@ -81,7 +81,8 @@ export default function Profile() {
       const fullName = `${formData.firstName} ${formData.lastName}`.trim();
       
       const onboardingPayload = {
-        learningGoals: onboardingData.learningGoals,
+        // learningGoals: onboardingData.learningGoals,
+        learningGoals: Array.isArray(onboardingData.learningGoals) ? onboardingData.learningGoals.join(', ') : onboardingData.learningGoals,
         studyStyle: onboardingData.studyStyle,
         availableHours: onboardingData.availableHours,
         selectedTrack: onboardingData.selectedTrack,
@@ -93,7 +94,7 @@ export default function Profile() {
 
       await completeOnboarding(onboardingPayload);
       
-      resetOnboardingData();
+    //   resetOnboardingData();
       
       navigate('/assessment/quick-skill-check');
     } catch (err) {
@@ -313,28 +314,28 @@ export default function Profile() {
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"><LinkIcon /></div>
                     </div>
                 </div>
+                {/* Actions Buttons */}
+                <div className="flex gap-4 mt-8 pt-4 border-t border-gray-800">
+                    <button 
+                        type="button"
+                        onClick={handleCancel}
+                        disabled={loading}
+                        className="flex-1 h-[56px] rounded-full border border-gray-600 text-white text-lg font-medium font-['Space_Grotesk'] hover:border-white hover:bg-white/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Cancel
+                    </button>
+                    
+                    <button 
+                        type="submit"
+                        disabled={loading}
+                        className="flex-1 h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {loading ? 'Saving...' : 'Save Profile'}
+                    </button>
+                </div>                
 
             </form>
 
-            {/* Actions Buttons */}
-            <div className="flex gap-4 mt-8 pt-4 border-t border-gray-800">
-                <button 
-                    type="button"
-                    onClick={handleCancel}
-                    disabled={loading}
-                    className="flex-1 h-[56px] rounded-full border border-gray-600 text-white text-lg font-medium font-['Space_Grotesk'] hover:border-white hover:bg-white/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    Cancel
-                </button>
-                
-                <button 
-                    type="submit"
-                    disabled={loading}
-                    className="flex-1 h-[56px] rounded-full bg-gradient-to-r from-[#7033FF] to-[#B899FF] text-[#EAEDFA] text-lg font-bold font-['Space_Grotesk'] hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(112,51,255,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    {loading ? 'Saving...' : 'Save Profile'}
-                </button>
-            </div>
 
         </div>
       </div>

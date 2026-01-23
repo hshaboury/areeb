@@ -39,7 +39,13 @@ export default function Home() {
   }, []);
 
   // Use API data if available, otherwise fallback to mock data
-  const { selectedPlan, stats, phases } = progressData || mockDashboardData;
+  // const { selectedPlan, stats, phases } = progressData || mockDashboardData;
+  const {
+    selectedPlan = mockDashboardData.selectedPlan,
+    stats,
+    phases
+  } = progressData || mockDashboardData;
+
   const currentPhase = progressData?.phases ? getCurrentPhase(progressData.phases) : getCurrentPhase(mockDashboardData.phases);
   const displayStats = achievementStats || stats;
 

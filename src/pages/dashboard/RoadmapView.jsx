@@ -58,7 +58,11 @@ export default function RoadmapView() {
   };
 
   // Use API data if available, otherwise fallback to mock data
-  const { selectedPlan, phases } = roadmapData || mockDashboardData;
+  // const { selectedPlan, phases } = roadmapData || mockDashboardData;
+  // const track = roadmapData?.user?.track || mockDashboardData.user.track;
+  const resolvedData = roadmapData?.phases?.length ? roadmapData : mockDashboardData;
+  const selectedPlan = resolvedData?.selectedPlan || mockDashboardData.selectedPlan;
+  const phases = Array.isArray(resolvedData?.phases) ? resolvedData.phases : mockDashboardData.phases;
   const track = roadmapData?.user?.track || mockDashboardData.user.track;
 
   if (loading) {
@@ -112,13 +116,13 @@ export default function RoadmapView() {
               Complete Learning Roadmap
             </h1>
             <p className="text-[#EAEDFA]/70 font-['Plus_Jakarta_Sans']">
-              {selectedPlan.name} - {selectedPlan.duration} • {selectedPlan.hoursPerWeek} hours per week
+              {selectedPlan?.name || 'Learning Plan'} - {selectedPlan?.duration || '--'} • {selectedPlan?.hoursPerWeek || '--'} hours per week
             </p>
           </div>
 
           {/* All Phases */}
           <div className="space-y-6">
-            {phases.map((phase) => (
+            {Array.isArray(phases) && phases.map((phase) => (
               <PhaseCard 
                 key={phase.id} 
                 phase={phase} 

@@ -8,7 +8,16 @@ const ArrowRightIcon = () => (
   </svg>
 );
 
-export default function RoadmapPreview({ phases }) {
+// export default function RoadmapPreview({ phases }) {
+export default function RoadmapPreview({ phases = [] }) {
+  if (!Array.isArray(phases) || phases.length === 0) {
+    return (
+      <div className="bg-white/5 border border-[#EAEDFA]/10 rounded-2xl p-6 text-center text-[#EAEDFA]/60 text-sm">
+        Your learning roadmap will appear here once it’s generated.
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white/5 border border-[#EAEDFA]/10 rounded-2xl p-6 backdrop-blur-sm">
       <div className="flex items-center justify-between mb-6">
@@ -29,7 +38,8 @@ export default function RoadmapPreview({ phases }) {
           const isLocked = !phase.isActive && index > phases.findIndex(p => p.isActive);
           
           return (
-            <div key={phase.id} className="relative">
+            // <div key={phase.id} className="relative">
+            <div key={phase.id ?? index} className="relative">
               {/* Phase Item */}
               <div className={`flex items-center gap-4 p-4 rounded-xl transition-all ${
                 phase.isActive
@@ -59,7 +69,8 @@ export default function RoadmapPreview({ phases }) {
                   <p className={`text-sm font-['Plus_Jakarta_Sans'] ${
                     phase.isActive ? 'text-[#EAEDFA]/80' : 'text-[#EAEDFA]/60'
                   }`}>
-                    {phase.topics.length} topics
+                    {/* {phase.topics.length} topics */}
+                    {(phase.topics?.length ?? 0)} topics
                   </p>
                 </div>
 
